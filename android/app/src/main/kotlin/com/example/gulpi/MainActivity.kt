@@ -1,4 +1,4 @@
-package com.example.gulpi
+package fr.klso.gulpi
 
 import io.flutter.embedding.android.FlutterActivity
 
