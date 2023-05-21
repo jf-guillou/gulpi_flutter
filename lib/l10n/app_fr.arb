@@ -1,4 +1,6 @@
 {
+  "addNote": "Ajouter une note",
+  "assetTag": "Tag : {tag}",
   "computerName": "Nom : {name}",
   "status": "Statut : {status}"
 }

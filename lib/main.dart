@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/loc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gulpi/screens/scan_screen.dart';
 
 void main() {
@@ -17,8 +17,8 @@ class Gulpi extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        localizationsDelegates: Loc.localizationsDelegates,
-        supportedLocales: Loc.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: const ScanScreen());
   }
 }

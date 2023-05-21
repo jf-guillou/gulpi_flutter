@@ -1,4 +1,14 @@
 {
+  "addNote": "Add note",
+  "assetTag": "Tag: {tag}",
+  "@assetTag": {
+    "placeholders": {
+      "tag": {
+        "type": "String",
+        "example": "asset-tag-123"
+      }
+    }
+  },
   "computerName": "Name: {name}",
   "@computerName": {
     "description": "Computer name",
