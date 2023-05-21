@@ -30,12 +30,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   title: Text(l10n.status("OK")),
                   trailing: PopupMenuButton(
                     itemBuilder: (context) => [
-                      const PopupMenuItem(value: 1, child: Text('OK')),
-                      const PopupMenuItem(value: 2, child: Text('Not OK')),
+                      PopupMenuItem(value: 1, child: Text(l10n.ok)),
+                      PopupMenuItem(value: 2, child: Text(l10n.ko)),
                     ],
                   )),
               FilledButton.tonal(onPressed: () {}, child: Text(l10n.addNote)),
-              FilledButton(onPressed: () {}, child: const Text('Save changes')),
+              FilledButton(onPressed: () {}, child: Text(l10n.saveChanges)),
             ],
           )),
       floatingActionButton: FloatingActionButton(

@@ -19,6 +19,9 @@
       }
     }
   },
+  "ko": "KO",
+  "ok": "OK",
+  "saveChanges": "Save changes",
   "status": "Status: {status}",
   "@status": {
     "placeholders": {
