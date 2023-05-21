@@ -1,0 +1,4 @@
+{
+  "computerName": "Nom : {name}",
+  "status": "Statut : {status}"
+}

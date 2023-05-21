@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/loc.dart';
 import 'package:gulpi/screens/scan_screen.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -23,10 +24,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
           child: ListView(
             children: [
               ListTile(title: Text('Tag : ${widget.tag}')),
-              const ListTile(title: Text('Name : pc-veil-123456')),
+              ListTile(
+                  title: Text(Loc.of(context)!.computerName("pc-veil-123456"))),
               ListTile(
                   title: Row(children: [
-                const Text('Status : OK'),
+                Text(Loc.of(context)!.status("OK")),
                 PopupMenuButton(
                   itemBuilder: (context) => [
                     const PopupMenuItem(value: 1, child: Text('OK')),

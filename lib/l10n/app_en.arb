@@ -1,0 +1,21 @@
+{
+  "computerName": "Name: {name}",
+  "@computerName": {
+    "description": "Computer name",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "computer-name"
+      }
+    }
+  },
+  "status": "Status: {status}",
+  "@status": {
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "OK"
+      }
+    }
+  }
+}
