@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
 import 'package:gulpi/models/item_model.dart';
+import 'package:gulpi/models/searchoption_model.dart';
+import 'package:gulpi/models/searchoptions_model.dart';
 import 'package:gulpi/utilities/exceptions.dart';
 import 'package:gulpi/utilities/item_types.dart';
 import 'package:http/http.dart' as http;
@@ -80,6 +82,20 @@ class APIService {
     }
     if (response.statusCode == HttpStatus.ok) {
       return Item.readJson(json.decode(response.body));
+    } else {
+      throw UnexpectedStatusCodeException(response.statusCode);
+    }
+  }
+
+  Future<SearchOptions> searchOptions(
+      {ItemType type = ItemType.computer}) async {
+    log('searchOptions:$type');
+    var response = await http.get(uri("${type.str}"), headers: headers());
+    if (response.statusCode == HttpStatus.unauthorized) {
+      throw AuthExpiredException();
+    }
+    if (response.statusCode == HttpStatus.ok) {
+      return SearchOptions.readJson(json.decode(response.body));
     } else {
       throw UnexpectedStatusCodeException(response.statusCode);
     }

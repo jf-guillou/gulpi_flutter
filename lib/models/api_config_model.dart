@@ -3,7 +3,7 @@ import 'dart:convert';
 class APIConfig {
   Uri? uri;
 
-  /// Optional application token identifier
+  /// Application token identifier
   String? _appToken;
 
   /// Session user auth token
