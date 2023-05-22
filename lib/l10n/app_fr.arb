@@ -3,6 +3,7 @@
   "assetTag": "Tag : {tag}",
   "inventory": "Inventaire",
   "ko": "KO",
+  "language": "Langue",
   "loading": "Loading",
   "lookupFailed": "Echec de la recherche",
   "lookupInGLPI": "Recherche de {rawbarcode} dans GLPI",

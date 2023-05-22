@@ -12,6 +12,7 @@
   },
   "inventory": "Inventory",
   "ko": "KO",
+  "language": "Language",
   "loading": "Chargement",
   "lookupFailed": "Lookup failed",
   "lookupInGLPI": "Lookup {rawbarcode} in GLPI",
