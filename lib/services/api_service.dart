@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
 import 'package:gulpi/models/item_model.dart';
+import 'package:gulpi/utilities/exceptions.dart';
 import 'package:gulpi/utilities/item_types.dart';
 import 'package:http/http.dart' as http;
 import 'package:gulpi/models/api_config_model.dart';
@@ -41,21 +42,24 @@ class APIService {
       Map<String, String> j = json.decode(response.body);
       String? token = j['session_token'];
       if (token == null || token.isEmpty) {
-        throw 'Missing session token during session init';
+        throw AuthFailedException();
       }
       config.setSessionToken(token);
     } else {
-      throw 'Unexpected status code : ${response.statusCode}';
+      throw UnexpectedStatusCodeException(response.statusCode);
     }
   }
 
   Future<Item> getItem(String id, {ItemType type = ItemType.computer}) async {
     log('getItem:$type:$id');
     var response = await http.get(uri("${type.str}/$id"), headers: headers());
+    if (response.statusCode == HttpStatus.unauthorized) {
+      throw AuthExpiredException();
+    }
     if (response.statusCode == HttpStatus.ok) {
       return Item.readJson(json.decode(response.body));
     } else {
-      throw 'Unexpected status code : ${response.statusCode}';
+      throw UnexpectedStatusCodeException(response.statusCode);
     }
   }
 }
