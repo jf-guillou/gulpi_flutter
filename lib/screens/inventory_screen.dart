@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gulpi/models/item_model.dart';
 import 'package:gulpi/screens/scan_screen.dart';
+import 'package:gulpi/widgets/app_drawer.dart';
 
 class InventoryScreen extends StatefulWidget {
+  static const name = "InventoryScreen";
   final String tag;
   final String id;
   const InventoryScreen(this.tag, this.id, {super.key});
@@ -26,6 +28,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     _item.status = "OK";
     return Scaffold(
       appBar: AppBar(title: Text(l10n.inventory)),
+      drawer: const AppDrawer(),
       body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: ListView(
@@ -46,8 +49,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
           )),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const ScanScreen()));
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => const ScanScreen(),
+                settings: const RouteSettings(name: ScanScreen.name)));
           },
           child: const Icon(Icons.photo_camera_outlined)),
     );

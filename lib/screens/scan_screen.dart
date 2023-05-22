@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gulpi/screens/inventory_screen.dart';
+import 'package:gulpi/widgets/app_drawer.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ScanScreen extends StatefulWidget {
+  static const name = "ScanScreen";
   const ScanScreen({super.key});
 
   @override
@@ -21,7 +23,6 @@ class _ScanScreenState extends State<ScanScreen> {
     torchEnabled: false,
   );
 
-  @override
   @override
   Widget build(BuildContext context) {
     AppLocalizations l10n = AppLocalizations.of(context)!;
@@ -63,6 +64,7 @@ class _ScanScreenState extends State<ScanScreen> {
           ),
         ],
       ),
+      drawer: const AppDrawer(),
       body: MobileScanner(
         // fit: BoxFit.contain,
         controller: cameraController,
@@ -128,7 +130,8 @@ class _ScanScreenState extends State<ScanScreen> {
             }
 
             Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => InventoryScreen(rawBarcode, id)));
+                builder: (context) => InventoryScreen(rawBarcode, id),
+                settings: const RouteSettings(name: InventoryScreen.name)));
             return;
           }
           _hasActiveLookup = false;
