@@ -1,3 +1,7 @@
+class NotImplementedException implements Exception {
+  String errMsg() => "Not implemented";
+}
+
 class AuthFailedException implements Exception {
   String errMsg() => "Authentication failed, no session token available";
 }

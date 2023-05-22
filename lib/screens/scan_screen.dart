@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gulpi/screens/inventory_screen.dart';
+import 'package:gulpi/screens/search_screen.dart';
 import 'package:gulpi/widgets/app_drawer.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -137,6 +138,13 @@ class _ScanScreenState extends State<ScanScreen> {
           _hasActiveLookup = false;
         },
       ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => const SearchScreen(),
+                settings: const RouteSettings(name: SearchScreen.name)));
+          },
+          child: const Icon(Icons.search)),
     );
   }
 

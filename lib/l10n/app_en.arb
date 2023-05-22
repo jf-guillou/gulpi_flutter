@@ -10,6 +10,7 @@
       }
     }
   },
+  "home": "Home",
   "inventory": "Inventory",
   "ko": "KO",
   "language": "Language",
@@ -37,6 +38,7 @@
   "ok": "OK",
   "saveChanges": "Save changes",
   "scan": "Scan",
+  "search": "Search",
   "settings": "Settings",
   "status": "Status: {status}",
   "@status": {

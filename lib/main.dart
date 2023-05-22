@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:gulpi/screens/scan_screen.dart';
+import 'package:gulpi/models/appstate_model.dart';
+import 'package:gulpi/screens/home_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const Gulpi());
+  runApp(ChangeNotifierProvider(
+      create: (context) => AppState(), child: const Gulpi()));
 }
 
 class Gulpi extends StatelessWidget {
@@ -19,6 +22,6 @@ class Gulpi extends StatelessWidget {
         ),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const ScanScreen());
+        home: const HomeScreen());
   }
 }

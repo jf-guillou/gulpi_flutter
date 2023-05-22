@@ -50,6 +50,28 @@ class APIService {
     }
   }
 
+  Future<int> searchItem(String criteria,
+      {ItemType type = ItemType.computer}) async {
+    log('searchItem:$type:$criteria');
+    var query = {
+      criteria: [
+        {"field": 1, "searchtype": 'contains', "value": criteria}
+      ]
+    };
+    var response =
+        await http.get(uri("${type.str}/", query), headers: headers());
+    if (response.statusCode == HttpStatus.unauthorized) {
+      throw AuthExpiredException();
+    }
+    if (response.statusCode == HttpStatus.ok) {
+      // TODO: searchItem
+      throw NotImplementedException();
+      return 0;
+    } else {
+      throw UnexpectedStatusCodeException(response.statusCode);
+    }
+  }
+
   Future<Item> getItem(String id, {ItemType type = ItemType.computer}) async {
     log('getItem:$type:$id');
     var response = await http.get(uri("${type.str}/$id"), headers: headers());

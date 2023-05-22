@@ -1,6 +1,7 @@
 {
   "addNote": "Ajouter une note",
   "assetTag": "Tag : {tag}",
+  "home": "Accueil",
   "inventory": "Inventaire",
   "ko": "KO",
   "language": "Langue",
@@ -19,6 +20,7 @@
   "ok": "OK",
   "saveChanges": "Enregistrer les modifications",
   "scan": "Scan",
+  "search": "Rechercher",
   "settings": "Paramètres",
   "status": "Statut : {status}"
 }
