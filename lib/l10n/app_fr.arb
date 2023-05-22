@@ -1,9 +1,23 @@
 {
   "addNote": "Ajouter une note",
   "assetTag": "Tag : {tag}",
-  "computerName": "Nom : {name}",
+  "inventory": "Inventaire",
   "ko": "KO",
+  "loading": "Loading",
+  "lookupFailed": "Echec de la recherche",
+  "lookupInGLPI": "Recherche de {rawbarcode} dans GLPI",
+  "@lookupInGLPI": {
+    "placeholders": {
+      "rawbarcode": {
+        "type": "String"
+      }
+    }
+  },
+  "name": "Nom : {name}",
+  "notFound": "Introuvable",
   "ok": "OK",
   "saveChanges": "Enregistrer les modifications",
+  "scan": "Scan",
+  "settings": "Paramètres",
   "status": "Statut : {status}"
 }

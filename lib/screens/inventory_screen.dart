@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gulpi/models/item_model.dart';
 import 'package:gulpi/screens/scan_screen.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -14,20 +15,25 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class _InventoryScreenState extends State<InventoryScreen> {
+  final _item = Item.readJson({"id": "1"});
+
   @override
   Widget build(BuildContext context) {
     log("InventoryScreen");
     AppLocalizations l10n = AppLocalizations.of(context)!;
+    _item.assetTag = widget.tag;
+    _item.name = "test-name";
+    _item.status = "OK";
     return Scaffold(
-      appBar: AppBar(title: const Text('Inventory')),
+      appBar: AppBar(title: Text(l10n.inventory)),
       body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: ListView(
             children: [
-              ListTile(title: Text(l10n.assetTag(widget.tag))),
-              ListTile(title: Text(l10n.computerName("pc-veil-123456"))),
+              ListTile(title: Text(l10n.assetTag(_item.assetTag ?? ""))),
+              ListTile(title: Text(l10n.name(_item.name ?? ""))),
               ListTile(
-                  title: Text(l10n.status("OK")),
+                  title: Text(l10n.status(_item.status ?? "")),
                   trailing: PopupMenuButton(
                     itemBuilder: (context) => [
                       PopupMenuItem(value: 1, child: Text(l10n.ok)),

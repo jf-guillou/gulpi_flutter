@@ -2,6 +2,7 @@
   "addNote": "Add note",
   "assetTag": "Tag: {tag}",
   "@assetTag": {
+    "description": "Asset tag",
     "placeholders": {
       "tag": {
         "type": "String",
@@ -9,19 +10,33 @@
       }
     }
   },
-  "computerName": "Name: {name}",
-  "@computerName": {
-    "description": "Computer name",
+  "inventory": "Inventory",
+  "ko": "KO",
+  "loading": "Chargement",
+  "lookupFailed": "Lookup failed",
+  "lookupInGLPI": "Lookup {rawbarcode} in GLPI",
+  "@lookupInGLPI": {
     "placeholders": {
-      "name": {
-        "type": "String",
-        "example": "computer-name"
+      "rawbarcode": {
+        "type": "String"
       }
     }
   },
-  "ko": "KO",
+  "name": "Name: {name}",
+  "@name": {
+    "description": "Name",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "item-name"
+      }
+    }
+  },
+  "notFound": "Not found",
   "ok": "OK",
   "saveChanges": "Save changes",
+  "scan": "Scan",
+  "settings": "Settings",
   "status": "Status: {status}",
   "@status": {
     "placeholders": {

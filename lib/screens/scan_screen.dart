@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gulpi/screens/inventory_screen.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -23,9 +24,10 @@ class _ScanScreenState extends State<ScanScreen> {
   @override
   @override
   Widget build(BuildContext context) {
+    AppLocalizations l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mobile Scanner'),
+        title: Text(l10n.scan),
         actions: [
           IconButton(
             color: Colors.white,
@@ -86,13 +88,11 @@ class _ScanScreenState extends State<ScanScreen> {
               barrierDismissible: false,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: const Text('Loading'),
+                  title: Text(l10n.loading),
                   content: Column(mainAxisSize: MainAxisSize.min, children: [
                     const CircularProgressIndicator(),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Text("Lookup $rawBarcode in GLPI"),
+                    const SizedBox(height: 15),
+                    Text(l10n.lookupInGLPI(rawBarcode)),
                   ]),
                 );
               },
@@ -107,9 +107,7 @@ class _ScanScreenState extends State<ScanScreen> {
               // Remove AlertDialog
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Lookup failed'),
-                ),
+                SnackBar(content: Text(l10n.lookupFailed)),
               );
               continue;
             }
@@ -124,9 +122,7 @@ class _ScanScreenState extends State<ScanScreen> {
 
             if (id.isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Not found'),
-                ),
+                SnackBar(content: Text(l10n.notFound)),
               );
               continue;
             }
