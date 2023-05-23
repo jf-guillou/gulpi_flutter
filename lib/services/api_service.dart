@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
 import 'package:gulpi/models/item_model.dart';
+import 'package:gulpi/models/searchcriteria_model.dart';
 import 'package:gulpi/models/searchoption_model.dart';
 import 'package:gulpi/models/searchoptions_model.dart';
 import 'package:gulpi/utilities/exceptions.dart';
@@ -52,14 +53,10 @@ class APIService {
     }
   }
 
-  Future<int> searchItem(String criteria,
+  Future<int> searchItem(List<SearchCriteria> criteria,
       {ItemType type = ItemType.computer}) async {
     log('searchItem:$type:$criteria');
-    var query = {
-      criteria: [
-        {"field": 1, "searchtype": 'contains', "value": criteria}
-      ]
-    };
+    var query = {"criteria": criteria};
     var response =
         await http.get(uri("${type.str}/", query), headers: headers());
     if (response.statusCode == HttpStatus.unauthorized) {
