@@ -149,8 +149,7 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   bool _isValidBarcode(String barcode) {
-    // TODO: _isValidBarcode
-    return true;
+    return barcode.length > 3 && barcode.length < 20;
   }
 
   Future<String> _lookupGLPI(String id) async {
