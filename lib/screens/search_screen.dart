@@ -21,7 +21,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.search)),
       drawer: const AppDrawer(),
-      body: Placeholder(),
+      body: const Placeholder(),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -30,11 +30,6 @@ class _SearchScreenState extends State<SearchScreen> {
           },
           child: const Icon(Icons.photo_camera_outlined)),
     );
-  }
-
-  bool _isValidBarcode(String barcode) {
-    // TODO: _isValidBarcode
-    return true;
   }
 
   Future<String> _lookupGLPI(String id) async {

@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
 import 'package:gulpi/models/item_model.dart';
+import 'package:gulpi/models/paginable_model.dart';
 import 'package:gulpi/models/searchcriteria_model.dart';
-import 'package:gulpi/models/searchoption_model.dart';
+import 'package:gulpi/models/searchitem_model.dart';
 import 'package:gulpi/models/searchoptions_model.dart';
 import 'package:gulpi/utilities/exceptions.dart';
 import 'package:gulpi/utilities/item_types.dart';
@@ -14,8 +15,7 @@ class APIService {
   APIService._instantiate();
   static final APIService instance = APIService._instantiate();
   static const prefix = 'apirest.php';
-
-  final APIConfig config = APIConfig();
+  late APIConfig config;
 
   Uri uri(String path, [Map<String, dynamic>? queryParameters]) {
     assert(config.hasUri());
@@ -37,6 +37,43 @@ class APIService {
     };
   }
 
+  Future<bool> checkUri() async {
+    log('checkUri');
+    http.Response response;
+    try {
+      response = await http.get(uri("initSession"),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'});
+    } catch (_) {
+      return false;
+    }
+    log("statusCode:${response.statusCode}");
+    if (response.statusCode == HttpStatus.unauthorized) {
+      throw AuthExpiredException();
+    }
+    if (response.statusCode == HttpStatus.ok) {
+      try {
+        var j = json.decode(response.body);
+        return j != null && j['session_token'];
+      } catch (_) {
+        return false;
+      }
+    }
+    if (response.statusCode == HttpStatus.badRequest) {
+      try {
+        _errorMessageToException(json.decode(response.body)[0]);
+      } on AppTokenException {
+        return true;
+      } on ApiMissingAuth {
+        return true;
+      } catch (_) {
+        rethrow;
+      }
+    } else {
+      throw UnexpectedStatusCodeException(response.statusCode);
+    }
+    return false;
+  }
+
   Future<void> initSession() async {
     log('initSession');
     var response =
@@ -48,24 +85,26 @@ class APIService {
         throw AuthFailedException();
       }
       config.setSessionToken(token);
+    } else if (response.statusCode == HttpStatus.badRequest) {
+      _errorMessageToException(json.decode(response.body)[0]);
     } else {
       throw UnexpectedStatusCodeException(response.statusCode);
     }
   }
 
-  Future<int> searchItem(List<SearchCriteria> criteria,
+  Future<Paginable<SearchItem>> searchItems(List<SearchCriteria> criteria,
       {ItemType type = ItemType.computer}) async {
-    log('searchItem:$type:$criteria');
+    log('searchItems:$type:$criteria');
     var query = {"criteria": criteria};
     var response =
-        await http.get(uri("${type.str}/", query), headers: headers());
+        await http.get(uri("search/${type.str}/", query), headers: headers());
     if (response.statusCode == HttpStatus.unauthorized) {
       throw AuthExpiredException();
     }
-    if (response.statusCode == HttpStatus.ok) {
-      // TODO: searchItem
-      throw NotImplementedException();
-      return 0;
+    if (response.statusCode == HttpStatus.ok ||
+        response.statusCode == HttpStatus.partialContent) {
+      return Paginable<SearchItem>.readJson(
+          json.decode(response.body), (item) => SearchItem.readJson(item));
     } else {
       throw UnexpectedStatusCodeException(response.statusCode);
     }
@@ -95,6 +134,20 @@ class APIService {
       return SearchOptions.readJson(json.decode(response.body));
     } else {
       throw UnexpectedStatusCodeException(response.statusCode);
+    }
+  }
+
+  void _errorMessageToException(String str) {
+    switch (str) {
+      case "ERROR_LOGIN_PARAMETERS_MISSING":
+        throw ApiMissingAuth();
+      case "ERROR_RESOURCE_NOT_FOUND_NOR_COMMONDBTM":
+        throw ApiWrongResourceException();
+      case "ERROR_APP_TOKEN_PARAMETERS_MISSING":
+      case "ERROR_WRONG_APP_TOKEN_PARAMETER":
+        throw AppTokenException();
+      default:
+        throw UnkownAPIErrorException(str);
     }
   }
 }

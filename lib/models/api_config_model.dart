@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:gulpi/models/appstate_model.dart';
+
 class APIConfig {
   Uri? uri;
 
@@ -13,6 +15,24 @@ class APIConfig {
   String? _authBasic;
 
   String? _sessionToken;
+
+  static APIConfig fromAppState(AppState app) {
+    if (app.url == null || (app.authBasic == null && app.userToken == null)) {
+      return APIConfig();
+    }
+
+    APIConfig c = APIConfig();
+    c.setUrl(app.url!);
+
+    if (app.authBasic != null) {
+      c._authBasic = app.authBasic!;
+    } else {
+      c._userToken = app.userToken!;
+    }
+    c._appToken = app.appToken;
+    c._sessionToken = app.sessionToken;
+    return c;
+  }
 
   bool hasUri() {
     return uri != null;
@@ -38,6 +58,10 @@ class APIConfig {
   void setUserToken(String token) {
     _userToken = token;
     _authBasic = null;
+  }
+
+  void setAppToken(String token) {
+    _appToken = token;
   }
 
   void setSessionToken(String token) {

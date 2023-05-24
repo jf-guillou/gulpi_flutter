@@ -5,21 +5,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppState extends ChangeNotifier {
   String? _url;
-  String? _token;
+  String? _appToken;
+  String? _userToken;
+  String? _authBasic;
+  String? _sessionToken;
+  String? _searchOptions;
 
-  AppState() {
-    log('AppState');
-    _loadState();
-  }
-
-  Future<void> _loadState() async {
-    log('_loadState');
+  Future<void> loadState() async {
+    log('loadState');
     var prefs = await SharedPreferences.getInstance();
     _url = prefs.getString('url');
-    _token = prefs.getString('token');
+    _appToken = prefs.getString('apptoken');
+    _userToken = prefs.getString('usertoken');
+    _authBasic = prefs.getString('authbasic');
+    _sessionToken = prefs.getString('sessiontoken');
+    _searchOptions = prefs.getString('searchoptions');
     notifyListeners();
   }
 
+  String? get url => _url;
   set url(String? url) {
     _url = url;
     notifyListeners();
@@ -27,13 +31,43 @@ class AppState extends ChangeNotifier {
         .then((prefs) => prefs.setString('url', url ?? ""));
   }
 
-  set token(String? token) {
-    _token = token;
+  String? get appToken => _appToken;
+  set appToken(String? appToken) {
+    _appToken = appToken;
     notifyListeners();
     SharedPreferences.getInstance()
-        .then((prefs) => prefs.setString('token', token ?? ""));
+        .then((prefs) => prefs.setString('apptoken', appToken ?? ""));
   }
 
-  String? get url => _url;
-  String? get token => _token;
+  String? get userToken => _userToken;
+  set userToken(String? userToken) {
+    _userToken = userToken;
+    notifyListeners();
+    SharedPreferences.getInstance()
+        .then((prefs) => prefs.setString('usertoken', userToken ?? ""));
+  }
+
+  String? get authBasic => _authBasic;
+  set authBasic(String? authBasic) {
+    _authBasic = authBasic;
+    notifyListeners();
+    SharedPreferences.getInstance()
+        .then((prefs) => prefs.setString('authbasic', authBasic ?? ""));
+  }
+
+  String? get sessionToken => _sessionToken;
+  set sessionToken(String? sessionToken) {
+    _sessionToken = sessionToken;
+    notifyListeners();
+    SharedPreferences.getInstance()
+        .then((prefs) => prefs.setString('sessiontoken', sessionToken ?? ""));
+  }
+
+  String? get searchOptions => _searchOptions;
+  set searchOptions(String? searchOptions) {
+    _searchOptions = searchOptions;
+    notifyListeners();
+    SharedPreferences.getInstance()
+        .then((prefs) => prefs.setString('searchoptions', searchOptions ?? ""));
+  }
 }
