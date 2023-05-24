@@ -27,7 +27,7 @@ class APIService {
         .replace(pathSegments: pathSegments, queryParameters: queryParameters);
   }
 
-  Map<String, String> headers({session = true, json = false}) {
+  Map<String, String> headers({session = true, json = true}) {
     return {
       HttpHeaders.authorizationHeader:
           session ? config.authSessionHeader() : config.authHeader(),
@@ -74,7 +74,7 @@ class APIService {
     return false;
   }
 
-  Future<void> initSession() async {
+  Future<String?> initSession() async {
     log('initSession');
     var response =
         await http.get(uri('initSession'), headers: headers(session: false));
@@ -85,11 +85,13 @@ class APIService {
         throw AuthFailedException();
       }
       config.setSessionToken(token);
+      return token;
     } else if (response.statusCode == HttpStatus.badRequest) {
       _errorMessageToException(json.decode(response.body)[0]);
     } else {
       throw UnexpectedStatusCodeException(response.statusCode);
     }
+    return null;
   }
 
   Future<Paginable<SearchItem>> searchItems(List<SearchCriteria> criteria,

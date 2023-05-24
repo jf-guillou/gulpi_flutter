@@ -7,6 +7,7 @@ import 'package:gulpi/models/appstate_model.dart';
 import 'package:gulpi/models/searchoptions_model.dart';
 import 'package:gulpi/screens/settings_screen.dart';
 import 'package:gulpi/services/api_service.dart';
+import 'package:gulpi/utilities/exceptions.dart';
 import 'package:gulpi/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -48,14 +49,16 @@ class HomeScreen extends StatelessWidget {
         !APIService.instance.config.hasAuth()) {
       log("missing config, goto settings");
       if (!context.mounted) return false;
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const SettingsScreen()));
+      _toSettings(context, "Missing configuration");
       return false;
     }
 
     try {
       if (!APIService.instance.config.hasSession()) {
-        await APIService.instance.initSession();
+        String? session = await APIService.instance.initSession();
+        if (session != null) {
+          app.sessionToken = session;
+        }
       }
 
       if (app.searchOptions == null) {
@@ -68,11 +71,20 @@ class HomeScreen extends StatelessWidget {
           app.searchOptions = SearchOptions.serialize();
         }
       }
+    } on AppTokenException {
+      _toSettings(context, "Wrong App token");
     } catch (e) {
       log("$e");
       return false;
     }
 
     return true;
+  }
+
+  void _toSettings(BuildContext context, String reason) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const SettingsScreen()));
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(reason)));
   }
 }
