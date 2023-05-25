@@ -68,9 +68,8 @@ class APIConfig {
     _sessionToken = token;
   }
 
-  // TODO: this could be nullable
-  String appHeader() {
-    return _appToken != null ? "App-Token: $_appToken" : "";
+  String? appTokenHeader() {
+    return _appToken;
   }
 
   String authHeader() {
@@ -81,7 +80,7 @@ class APIConfig {
     return _userToken != null ? 'user_token $_userToken' : 'Basic $_authBasic';
   }
 
-  String authSessionHeader() {
-    return "Session-Token: $_sessionToken";
+  String? authSessionHeader() {
+    return _sessionToken;
   }
 }

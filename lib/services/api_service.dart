@@ -17,31 +17,41 @@ class APIService {
   static const prefix = 'apirest.php';
   late APIConfig config;
 
-  Uri uri(String path, [Map<String, dynamic>? queryParameters]) {
+  Uri uri(List<String> segments, [Map<String, dynamic>? queryParameters]) {
     assert(config.hasUri());
 
     List<String> pathSegments = config.uri!.pathSegments.toList()
       ..add(prefix)
-      ..add(path);
+      ..addAll(segments);
+    log(pathSegments.toString());
     return config.uri!
         .replace(pathSegments: pathSegments, queryParameters: queryParameters);
   }
 
-  Map<String, String> headers({session = true, json = true}) {
-    return {
-      HttpHeaders.authorizationHeader:
-          session ? config.authSessionHeader() : config.authHeader(),
+  Map<String, String> headers({bool session = true, bool json = true}) {
+    Map<String, String> h = {
       HttpHeaders.contentTypeHeader:
           json ? 'application/json' : 'multipart/form-data',
       HttpHeaders.acceptHeader: 'application/json',
     };
+    if (session) {
+      h['Session-Token'] = config.authSessionHeader()!;
+    } else {
+      h[HttpHeaders.authorizationHeader] = config.authHeader();
+    }
+    if (config.appTokenHeader() != null) {
+      h['App-Token'] = config.appTokenHeader()!;
+    }
+    log(h.toString());
+
+    return h;
   }
 
   Future<bool> checkUri() async {
     log('checkUri');
     http.Response response;
     try {
-      response = await http.get(uri("initSession"),
+      response = await http.get(uri(["initSession"]),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'});
     } catch (_) {
       return false;
@@ -60,7 +70,7 @@ class APIService {
     }
     if (response.statusCode == HttpStatus.badRequest) {
       try {
-        _errorMessageToException(json.decode(response.body)[0]);
+        throw _errorMessageToException(json.decode(response.body)[0]);
       } on AppTokenException {
         return true;
       } on ApiMissingAuth {
@@ -71,15 +81,14 @@ class APIService {
     } else {
       throw UnexpectedStatusCodeException(response.statusCode);
     }
-    return false;
   }
 
   Future<String?> initSession() async {
     log('initSession');
     var response =
-        await http.get(uri('initSession'), headers: headers(session: false));
+        await http.get(uri(['initSession']), headers: headers(session: false));
     if (response.statusCode == HttpStatus.ok) {
-      Map<String, String> j = json.decode(response.body);
+      Map<String, dynamic> j = json.decode(response.body);
       String? token = j['session_token'];
       if (token == null || token.isEmpty) {
         throw AuthFailedException();
@@ -87,11 +96,10 @@ class APIService {
       config.setSessionToken(token);
       return token;
     } else if (response.statusCode == HttpStatus.badRequest) {
-      _errorMessageToException(json.decode(response.body)[0]);
+      throw _errorMessageToException(json.decode(response.body)[0]);
     } else {
       throw UnexpectedStatusCodeException(response.statusCode);
     }
-    return null;
   }
 
   Future<Paginable<SearchItem>> searchItems(List<SearchCriteria> criteria,
@@ -99,7 +107,7 @@ class APIService {
     log('searchItems:$type:$criteria');
     var query = {"criteria": criteria};
     var response =
-        await http.get(uri("search/${type.str}/", query), headers: headers());
+        await http.get(uri(['search', type.str], query), headers: headers());
     if (response.statusCode == HttpStatus.unauthorized) {
       throw AuthExpiredException();
     }
@@ -107,6 +115,8 @@ class APIService {
         response.statusCode == HttpStatus.partialContent) {
       return Paginable<SearchItem>.readJson(
           json.decode(response.body), (item) => SearchItem.readJson(item));
+    } else if (response.statusCode == HttpStatus.badRequest) {
+      throw _errorMessageToException(json.decode(response.body)[0]);
     } else {
       throw UnexpectedStatusCodeException(response.statusCode);
     }
@@ -114,12 +124,14 @@ class APIService {
 
   Future<Item> getItem(String id, {ItemType type = ItemType.computer}) async {
     log('getItem:$type:$id');
-    var response = await http.get(uri("${type.str}/$id"), headers: headers());
+    var response = await http.get(uri([type.str, id]), headers: headers());
     if (response.statusCode == HttpStatus.unauthorized) {
       throw AuthExpiredException();
     }
     if (response.statusCode == HttpStatus.ok) {
       return Item.readJson(json.decode(response.body));
+    } else if (response.statusCode == HttpStatus.badRequest) {
+      throw _errorMessageToException(json.decode(response.body)[0]);
     } else {
       throw UnexpectedStatusCodeException(response.statusCode);
     }
@@ -128,28 +140,31 @@ class APIService {
   Future<SearchOptions> searchOptions(
       {ItemType type = ItemType.computer}) async {
     log('searchOptions:$type');
-    var response = await http.get(uri("${type.str}"), headers: headers());
+    var response = await http.get(uri(['listSearchOptions', type.str]),
+        headers: headers());
     if (response.statusCode == HttpStatus.unauthorized) {
       throw AuthExpiredException();
     }
     if (response.statusCode == HttpStatus.ok) {
       return SearchOptions.readJson(json.decode(response.body));
+    } else if (response.statusCode == HttpStatus.badRequest) {
+      throw _errorMessageToException(json.decode(response.body)[0]);
     } else {
       throw UnexpectedStatusCodeException(response.statusCode);
     }
   }
 
-  void _errorMessageToException(String str) {
+  Exception _errorMessageToException(String str) {
     switch (str) {
       case "ERROR_LOGIN_PARAMETERS_MISSING":
-        throw ApiMissingAuth();
+        return ApiMissingAuth();
       case "ERROR_RESOURCE_NOT_FOUND_NOR_COMMONDBTM":
-        throw ApiWrongResourceException();
+        return ApiWrongResourceException();
       case "ERROR_APP_TOKEN_PARAMETERS_MISSING":
       case "ERROR_WRONG_APP_TOKEN_PARAMETER":
-        throw AppTokenException();
+        return AppTokenException();
       default:
-        throw UnkownAPIErrorException(str);
+        return UnkownAPIErrorException(str);
     }
   }
 }

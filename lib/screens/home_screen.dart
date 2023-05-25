@@ -55,6 +55,7 @@ class HomeScreen extends StatelessWidget {
 
     try {
       if (!APIService.instance.config.hasSession()) {
+        log("missing session");
         String? session = await APIService.instance.initSession();
         if (session != null) {
           app.sessionToken = session;
@@ -62,11 +63,13 @@ class HomeScreen extends StatelessWidget {
       }
 
       if (app.searchOptions == null) {
+        log("missing searchOptions");
         await APIService.instance.searchOptions();
         app.searchOptions = SearchOptions.serialize();
       } else {
         SearchOptions.unserialize(app.searchOptions!);
         if (SearchOptions.isStale()) {
+          log("stale searchOptions");
           await APIService.instance.searchOptions();
           app.searchOptions = SearchOptions.serialize();
         }
@@ -74,7 +77,7 @@ class HomeScreen extends StatelessWidget {
     } on AppTokenException {
       _toSettings(context, "Wrong App token");
     } catch (e) {
-      log("$e");
+      log(e.toString());
       return false;
     }
 

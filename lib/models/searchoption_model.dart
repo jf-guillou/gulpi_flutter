@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class SearchOption {
   int? id;
   String? cat;
@@ -18,6 +20,19 @@ class SearchOption {
     datatype = json['datatype'];
     nosearch = json['nosearch'];
     nodisplay = json['nodisplay'];
-    availableSearchtypes = json['availableSearchtypes'];
+    availableSearchtypes = List.from(json['available_searchtypes']);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "uid": uid,
+      "name": name,
+      "table": table,
+      "field": field,
+      "datatype": datatype,
+      "nosearch": nosearch,
+      "nodisplay": nodisplay,
+      "available_searchtypes": availableSearchtypes,
+    };
   }
 }

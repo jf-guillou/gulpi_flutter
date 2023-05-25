@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:gulpi/models/searchoption_model.dart';
 
@@ -38,13 +39,13 @@ class SearchOptions {
       return;
     }
 
-    _updatedAt = j['updatedAt'];
+    _updatedAt = DateTime.parse(j['updatedAt']);
     arr = j['arr'];
   }
 
   static String serialize() {
     return json.encode({
-      "updatedAt": _updatedAt,
+      "updatedAt": _updatedAt!.toIso8601String(),
       "arr": arr,
     });
   }
