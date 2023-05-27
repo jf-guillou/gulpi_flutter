@@ -10,12 +10,21 @@ class Paginable<T extends BaseModel> {
   late String range;
   late List<T> items;
 
+  Paginable() {
+    totalcount = 0;
+    count = 0;
+    sort = "";
+    order = "";
+    range = "";
+    items = [];
+  }
+
   Paginable.fromJson(Map<String, dynamic> json, Itemizer<T> itemizer)
       : super() {
     totalcount = json['totalcount'];
     count = json['count'];
     sort = json['sort'][0];
-    order = json['pages'][0];
+    order = json['order'][0];
     range = json['content-range'];
     items = [];
 

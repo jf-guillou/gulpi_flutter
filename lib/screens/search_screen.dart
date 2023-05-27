@@ -2,8 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gulpi/models/paginable_model.dart';
+import 'package:gulpi/models/searchcriteria_model.dart';
+import 'package:gulpi/models/searchcriterion_model.dart';
+import 'package:gulpi/models/searchitem_model.dart';
 import 'package:gulpi/screens/inventory_screen.dart';
 import 'package:gulpi/screens/scan_screen.dart';
+import 'package:gulpi/services/api_service.dart';
 import 'package:gulpi/widgets/app_drawer.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -32,9 +37,16 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Future<String> _lookupGLPI(String id) async {
-    // TODO: _lookupGLPI
-    await Future.delayed(const Duration(seconds: 2));
-    return "1";
+  Future<String?> _lookupGLPI(String id) async {
+    SearchCriterion c = SearchCriterion();
+    c.add(SearchCriteria().uid("Computer.name").contains(id));
+    c.add(SearchCriteria().or().uid("Computer.serial").contains(id));
+    c.add(SearchCriteria().or().uid("Computer.otherserial").contains(id));
+    Paginable<SearchItem> items = await APIService.instance.searchItems(c);
+    if (items.count == 0) {
+      return null;
+    }
+
+    return null;
   }
 }

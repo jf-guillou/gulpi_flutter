@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gulpi/models/api_config_model.dart';
 import 'package:gulpi/models/appstate_model.dart';
 import 'package:gulpi/models/searchoptions_model.dart';
+import 'package:gulpi/screens/scan_screen.dart';
 import 'package:gulpi/screens/settings_screen.dart';
 import 'package:gulpi/services/api_service.dart';
 import 'package:gulpi/utilities/exceptions.dart';
@@ -36,7 +37,13 @@ class HomeScreen extends StatelessWidget {
                 );
               }
 
-              return const Placeholder();
+              return Center(
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => const ScanScreen()));
+                      },
+                      child: Text(l10n.scan)));
             }),
         floatingActionButton: null);
   }

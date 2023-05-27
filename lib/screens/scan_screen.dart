@@ -2,8 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gulpi/models/paginable_model.dart';
+import 'package:gulpi/models/searchcriteria_model.dart';
+import 'package:gulpi/models/searchcriterion_model.dart';
+import 'package:gulpi/models/searchitem_model.dart';
 import 'package:gulpi/screens/inventory_screen.dart';
 import 'package:gulpi/screens/search_screen.dart';
+import 'package:gulpi/services/api_service.dart';
 import 'package:gulpi/widgets/app_drawer.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -100,17 +105,31 @@ class _ScanScreenState extends State<ScanScreen> {
                 );
               },
             );
-            late String id;
+
+            String? id;
             try {
               id = await _lookupGLPI(rawBarcode);
             } catch (e) {
               if (!context.mounted) {
                 return;
               }
+              log("$e");
               // Remove AlertDialog
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(l10n.lookupFailed)),
+              );
+              continue;
+            }
+
+            if (id == null) {
+              if (!context.mounted) {
+                return;
+              }
+              // Remove AlertDialog
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(l10n.noResults)),
               );
               continue;
             }
@@ -131,7 +150,7 @@ class _ScanScreenState extends State<ScanScreen> {
             }
 
             Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => InventoryScreen(rawBarcode, id),
+                builder: (context) => InventoryScreen(rawBarcode, id!),
                 settings: const RouteSettings(name: InventoryScreen.name)));
             return;
           }
@@ -152,9 +171,16 @@ class _ScanScreenState extends State<ScanScreen> {
     return barcode.length > 3 && barcode.length < 20;
   }
 
-  Future<String> _lookupGLPI(String id) async {
-    // TODO: _lookupGLPI
-    await Future.delayed(const Duration(seconds: 2));
-    return "1";
+  Future<String?> _lookupGLPI(String id) async {
+    SearchCriterion c = SearchCriterion();
+    c.add(SearchCriteria().uid("Computer.name").contains(id));
+    c.add(SearchCriteria().or().uid("Computer.serial").contains(id));
+    c.add(SearchCriteria().or().uid("Computer.otherserial").contains(id));
+    Paginable<SearchItem> items = await APIService.instance.searchItems(c);
+    if (items.count == 0) {
+      return null;
+    }
+
+    return null;
   }
 }

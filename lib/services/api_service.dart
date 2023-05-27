@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:developer';
 import 'package:gulpi/models/item_model.dart';
 import 'package:gulpi/models/paginable_model.dart';
-import 'package:gulpi/models/searchcriteria_model.dart';
+import 'package:gulpi/models/searchcriterion_model.dart';
 import 'package:gulpi/models/searchitem_model.dart';
 import 'package:gulpi/models/searchoptions_model.dart';
 import 'package:gulpi/utilities/exceptions.dart';
@@ -102,10 +102,11 @@ class APIService {
     }
   }
 
-  Future<Paginable<SearchItem>> searchItems(List<SearchCriteria> criteria,
+  Future<Paginable<SearchItem>> searchItems(SearchCriterion crit,
       {ItemType type = ItemType.computer}) async {
-    log('searchItems:$type:$criteria');
-    var query = {"criteria": criteria};
+    log('searchItems:$type:$crit');
+    var query = crit.toUrlQuery();
+    query['uid_cols'] = "1";
     var response =
         await http.get(uri(['search', type.str], query), headers: headers());
     if (response.statusCode == HttpStatus.unauthorized) {
@@ -113,6 +114,9 @@ class APIService {
     }
     if (response.statusCode == HttpStatus.ok ||
         response.statusCode == HttpStatus.partialContent) {
+      if (response.body.isEmpty) {
+        return Paginable<SearchItem>();
+      }
       return Paginable<SearchItem>.fromJson(
           json.decode(response.body), (item) => SearchItem.fromJson(item));
     } else if (response.statusCode == HttpStatus.badRequest) {

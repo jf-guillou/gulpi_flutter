@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 class SearchOption {
   int? id;
   String? cat;
@@ -13,6 +11,8 @@ class SearchOption {
   late List<String> availableSearchtypes;
 
   SearchOption.fromJson(Map<String, dynamic> json) : super() {
+    id = json['id'];
+    cat = json['cat'];
     uid = json['uid'] is int ? json['uid'].toString() : json['uid'];
     name = json['name'];
     table = json['table'];
@@ -25,6 +25,8 @@ class SearchOption {
 
   Map<String, dynamic> toJson() {
     return {
+      "id": id,
+      "cat": cat,
       "uid": uid,
       "name": name,
       "table": table,

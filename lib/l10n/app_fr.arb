@@ -16,6 +16,7 @@
     }
   },
   "name": "Nom : {name}",
+  "noResults": "Pas de résultats",
   "notFound": "Introuvable",
   "ok": "OK",
   "saveChanges": "Enregistrer les modifications",
