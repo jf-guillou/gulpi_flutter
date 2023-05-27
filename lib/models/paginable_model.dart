@@ -10,7 +10,7 @@ class Paginable<T extends BaseModel> {
   late String range;
   late List<T> items;
 
-  Paginable.readJson(Map<String, dynamic> json, Itemizer<T> itemizer)
+  Paginable.fromJson(Map<String, dynamic> json, Itemizer<T> itemizer)
       : super() {
     totalcount = json['totalcount'];
     count = json['count'];

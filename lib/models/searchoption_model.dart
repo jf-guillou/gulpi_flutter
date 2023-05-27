@@ -12,7 +12,7 @@ class SearchOption {
   late bool nodisplay;
   late List<String> availableSearchtypes;
 
-  SearchOption.readJson(Map<String, dynamic> json) : super() {
+  SearchOption.fromJson(Map<String, dynamic> json) : super() {
     uid = json['uid'] is int ? json['uid'].toString() : json['uid'];
     name = json['name'];
     table = json['table'];

@@ -113,8 +113,8 @@ class APIService {
     }
     if (response.statusCode == HttpStatus.ok ||
         response.statusCode == HttpStatus.partialContent) {
-      return Paginable<SearchItem>.readJson(
-          json.decode(response.body), (item) => SearchItem.readJson(item));
+      return Paginable<SearchItem>.fromJson(
+          json.decode(response.body), (item) => SearchItem.fromJson(item));
     } else if (response.statusCode == HttpStatus.badRequest) {
       throw _errorMessageToException(json.decode(response.body)[0]);
     } else {
@@ -129,7 +129,7 @@ class APIService {
       throw AuthExpiredException();
     }
     if (response.statusCode == HttpStatus.ok) {
-      return Item.readJson(json.decode(response.body));
+      return Item.fromJson(json.decode(response.body));
     } else if (response.statusCode == HttpStatus.badRequest) {
       throw _errorMessageToException(json.decode(response.body)[0]);
     } else {
@@ -146,7 +146,7 @@ class APIService {
       throw AuthExpiredException();
     }
     if (response.statusCode == HttpStatus.ok) {
-      return SearchOptions.readJson(json.decode(response.body));
+      return SearchOptions.fromJson(json.decode(response.body));
     } else if (response.statusCode == HttpStatus.badRequest) {
       throw _errorMessageToException(json.decode(response.body)[0]);
     } else {

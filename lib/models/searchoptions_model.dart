@@ -8,13 +8,13 @@ class SearchOptions {
   static const Duration _stalenessThreshold = Duration(days: 7);
   static List<SearchOption> arr = [];
 
-  SearchOptions.readJson(Map<String, dynamic> json) : super() {
+  SearchOptions.fromJson(Map<String, dynamic> json) : super() {
     _updatedAt = DateTime.now();
     String? currentCat;
     json.forEach((key, value) {
       int? intKey = int.tryParse(key);
       if (intKey != null) {
-        SearchOption opt = SearchOption.readJson(value);
+        SearchOption opt = SearchOption.fromJson(value);
         opt.id = intKey;
         opt.cat = currentCat;
         arr.add(opt);
@@ -40,7 +40,7 @@ class SearchOptions {
     }
 
     _updatedAt = DateTime.parse(j['updatedAt']);
-    arr = j['arr'];
+    arr = List.from(j['arr'].map((e) => SearchOption.fromJson(e)));
   }
 
   static String serialize() {

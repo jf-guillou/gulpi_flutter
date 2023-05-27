@@ -4,7 +4,13 @@ class Item {
   String? name;
   String? status;
 
-  Item.readJson(Map<String, dynamic> json) : super() {
+  Item.fromJson(Map<String, dynamic> json) : super() {
     id = json['id'] is int ? json['id'].toString() : json['id'];
+  }
+
+  Map toJson() {
+    return {
+      "id": id,
+    };
   }
 }

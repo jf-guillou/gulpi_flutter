@@ -17,7 +17,7 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class _InventoryScreenState extends State<InventoryScreen> {
-  final _item = Item.readJson({"id": "1"});
+  final _item = Item.fromJson({"id": "1"});
 
   @override
   Widget build(BuildContext context) {
