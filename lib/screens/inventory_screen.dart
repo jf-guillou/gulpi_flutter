@@ -19,6 +19,9 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class _InventoryScreenState extends State<InventoryScreen> {
+  Computer? _item;
+  Computer? _remoteItem;
+
   @override
   Widget build(BuildContext context) {
     log("InventoryScreen");
@@ -28,8 +31,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       drawer: const AppDrawer(),
       body: RefreshIndicator(
           onRefresh: () async {
-            // FIXME : this triggers rebuild & double API call ?
-            await _getComputer(widget.id);
+            await _fetchComputer(widget.id);
             setState(() {});
           },
           child: FutureBuilder(
@@ -46,19 +48,26 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   );
                 }
 
-                final Computer item = snapshot.data!;
-                item.assetTag = widget.tag;
                 return Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: ListView(
                       children: [
-                        ListTile(title: Text(l10n.assetTag(item.assetTag))),
-                        ListTile(title: Text(l10n.name(item.name))),
+                        ListTile(title: Text(l10n.assetTag(_item!.assetTag))),
+                        ListTile(title: Text(l10n.name(_item!.name))),
                         ListTile(
-                            title: Text(l10n.status(Cache.instance.itemStates!
-                                .getElementById(item.state)!
-                                .name)),
+                            title: Text(
+                                l10n.status(Cache.instance.itemStates!
+                                    .getElementById(_item!.state)!
+                                    .name),
+                                style: _item!.state != _remoteItem!.state
+                                    ? TextStyle(fontWeight: FontWeight.bold)
+                                    : null),
                             trailing: PopupMenuButton(
+                              onSelected: (v) {
+                                setState(() {
+                                  _item!.state = v;
+                                });
+                              },
                               itemBuilder: (context) => Cache
                                   .instance.itemStates!.arr
                                   .map((e) => PopupMenuItem(
@@ -68,7 +77,13 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         FilledButton.tonal(
                             onPressed: () {}, child: Text(l10n.addNote)),
                         FilledButton(
-                            onPressed: () {}, child: Text(l10n.saveChanges)),
+                            onPressed: () async {
+                              if (await _saveChanges(widget.id) && mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(l10n.changesSaved)));
+                              }
+                            },
+                            child: Text(l10n.saveChanges)),
                       ],
                     ));
               })),
@@ -83,6 +98,31 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
 
   Future<Computer?> _getComputer(String id) async {
-    return await API.instance.getItem(id) as Computer;
+    if (_item != null) {
+      return _item;
+    }
+
+    return _fetchComputer(id);
+  }
+
+  Future<Computer?> _fetchComputer(String id) async {
+    Computer item = await API.instance.getItem(id) as Computer;
+    item.assetTag = widget.tag;
+    setState(() {
+      _item = item;
+    });
+    _remoteItem = item.clone();
+
+    return item;
+  }
+
+  Future<bool> _saveChanges(String id) async {
+    Map<String, dynamic> fields = _item!.diff(_remoteItem!);
+    if (fields.isEmpty) {
+      return false;
+    }
+    bool saved = await API.instance.updateItem(id, fields);
+    await _fetchComputer(id);
+    return saved;
   }
 }

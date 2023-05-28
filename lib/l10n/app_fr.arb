@@ -1,6 +1,7 @@
 {
   "addNote": "Ajouter une note",
   "assetTag": "Tag : {tag}",
+  "changesSaved": "Modifications enregistrées",
   "home": "Accueil",
   "inventory": "Inventaire",
   "ko": "KO",

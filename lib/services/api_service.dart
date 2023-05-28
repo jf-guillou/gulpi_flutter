@@ -154,6 +154,24 @@ class API {
     }
   }
 
+  Future<bool> updateItem(String id, Map<String, dynamic> fields,
+      {ItemType type = ItemType.computer}) async {
+    log('updateItem:$type:$id');
+    var response = await http.put(uri([type.str, id]),
+        body: json.encode({"input": fields}), headers: headers());
+    log("statusCode:${response.statusCode}");
+    if (response.statusCode == HttpStatus.unauthorized) {
+      throw AuthExpiredException();
+    }
+    if (response.statusCode == HttpStatus.ok) {
+      return json.decode(response.body)[0][id];
+    } else if (response.statusCode == HttpStatus.badRequest) {
+      throw _errorMessageToException(json.decode(response.body)[0]);
+    } else {
+      throw UnexpectedStatusCodeException(response.statusCode);
+    }
+  }
+
   Future<SearchOptions> searchOptions(
       {ItemType type = ItemType.computer}) async {
     log('searchOptions:$type');
