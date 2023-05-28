@@ -7,6 +7,7 @@ import 'package:gulpi/screens/scan_screen.dart';
 import 'package:gulpi/services/api_service.dart';
 import 'package:gulpi/services/cache_service.dart';
 import 'package:gulpi/widgets/app_drawer.dart';
+import 'package:gulpi/widgets/note_card.dart';
 
 class InventoryScreen extends StatefulWidget {
   static const name = "InventoryScreen";
@@ -74,6 +75,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                       value: e.id, child: Text(e.name)))
                                   .toList(),
                             )),
+                        _item!.notes != null && _item!.notes!.isNotEmpty
+                            ? NoteCard(_item!.notes!.first.content)
+                            : SizedBox(),
                         FilledButton.tonal(
                             onPressed: () {}, child: Text(l10n.addNote)),
                         FilledButton(

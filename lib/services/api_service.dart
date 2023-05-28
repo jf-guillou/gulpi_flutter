@@ -135,7 +135,9 @@ class API {
 
   Future<Item?> getItem(String id, {ItemType type = ItemType.computer}) async {
     log('getItem:$type:$id');
-    var response = await http.get(uri([type.str, id]), headers: headers());
+    Map<String, String> query = {"with_notes": "1"};
+    var response =
+        await http.get(uri([type.str, id], query), headers: headers());
     log("statusCode:${response.statusCode}");
     if (response.statusCode == HttpStatus.unauthorized) {
       throw AuthExpiredException();
