@@ -1,7 +1,11 @@
 import 'package:gulpi/models/searchcriteria_model.dart';
+import 'package:gulpi/utilities/item_types.dart';
 
 class SearchCriterion {
   final List<SearchCriteria> _arr = [];
+  late ItemType type;
+
+  SearchCriterion(this.type);
 
   void add(SearchCriteria c) {
     _arr.add(c);

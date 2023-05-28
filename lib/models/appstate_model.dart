@@ -9,7 +9,6 @@ class AppState extends ChangeNotifier {
   String? _userToken;
   String? _authBasic;
   String? _sessionToken;
-  String? _searchOptions;
 
   Future<void> loadState() async {
     log('loadState');
@@ -19,7 +18,6 @@ class AppState extends ChangeNotifier {
     _userToken = prefs.getString('usertoken');
     _authBasic = prefs.getString('authbasic');
     _sessionToken = prefs.getString('sessiontoken');
-    _searchOptions = prefs.getString('searchoptions');
     notifyListeners();
   }
 
@@ -61,13 +59,5 @@ class AppState extends ChangeNotifier {
     notifyListeners();
     SharedPreferences.getInstance()
         .then((prefs) => prefs.setString('sessiontoken', sessionToken ?? ""));
-  }
-
-  String? get searchOptions => _searchOptions;
-  set searchOptions(String? searchOptions) {
-    _searchOptions = searchOptions;
-    notifyListeners();
-    SharedPreferences.getInstance()
-        .then((prefs) => prefs.setString('searchoptions', searchOptions ?? ""));
   }
 }

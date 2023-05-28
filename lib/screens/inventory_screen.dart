@@ -79,6 +79,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
 
   Future<Computer?> _getComputer(String id) async {
-    return await APIService.instance.getItem(id) as Computer;
+    return await API.instance.getItem(id) as Computer;
   }
 }

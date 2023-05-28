@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:gulpi/models/searchoption_model.dart';
 
 class SearchOptions {
-  static DateTime? _updatedAt;
   static const Duration _stalenessThreshold = Duration(days: 7);
-  static List<SearchOption> arr = [];
+  DateTime? _updatedAt;
+  List<SearchOption> arr = [];
 
   SearchOptions.fromJson(Map<String, dynamic> json) : super() {
     _updatedAt = DateTime.now();
@@ -23,16 +23,16 @@ class SearchOptions {
     });
   }
 
-  static SearchOption? fromUid(String uid) {
+  SearchOption? fromUid(String uid) {
     return arr.where((e) => e.uid == uid).firstOrNull;
   }
 
-  static bool isStale() {
+  bool isStale() {
     return _updatedAt == null ||
         _updatedAt!.add(_stalenessThreshold).isBefore(DateTime.now());
   }
 
-  static void unserialize(String str) {
+  SearchOptions.unserialize(String str) {
     var j = json.decode(str);
     if (j == null) {
       return;
@@ -42,7 +42,7 @@ class SearchOptions {
     arr = List.from(j['arr'].map((e) => SearchOption.fromJson(e)));
   }
 
-  static String serialize() {
+  String serialize() {
     return json.encode({
       "updatedAt": _updatedAt!.toIso8601String(),
       "arr": arr,

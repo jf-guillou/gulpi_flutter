@@ -9,6 +9,7 @@ import 'package:gulpi/models/searchitem_model.dart';
 import 'package:gulpi/screens/inventory_screen.dart';
 import 'package:gulpi/screens/search_screen.dart';
 import 'package:gulpi/services/api_service.dart';
+import 'package:gulpi/utilities/item_types.dart';
 import 'package:gulpi/widgets/app_drawer.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -173,11 +174,11 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   Future<String?> _lookupGLPI(String id) async {
-    SearchCriterion c = SearchCriterion();
-    c.add(SearchCriteria().uid("Computer.name").contains(id));
-    c.add(SearchCriteria().or().uid("Computer.serial").contains(id));
-    c.add(SearchCriteria().or().uid("Computer.otherserial").contains(id));
-    Paginable<SearchItem> items = await APIService.instance.searchItems(c);
+    SearchCriterion c = SearchCriterion(ItemType.computer);
+    c.add(SearchCriteria(c.type).uid("Computer.name").contains(id));
+    c.add(SearchCriteria(c.type).or().uid("Computer.serial").contains(id));
+    c.add(SearchCriteria(c.type).or().uid("Computer.otherserial").contains(id));
+    Paginable<SearchItem> items = await API.instance.searchItems(c);
     if (items.count == 0) {
       return null;
     }

@@ -57,8 +57,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               );
                               return;
                             }
-                            APIService.instance.config.setUrl(value);
-                            bool success = await APIService.instance.checkUri();
+                            API.instance.config.setUrl(value);
+                            bool success = await API.instance.checkUri();
                             if (!success) {
                               if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -83,7 +83,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       builder: (context) =>
                           TextFieldPopup("App token", "", app.appToken ?? "",
                               (String value) async {
-                            APIService.instance.config.setAppToken(value);
+                            API.instance.config.setAppToken(value);
                             app.appToken = value;
                             setState(() {});
                           }));
@@ -99,7 +99,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       builder: (context) =>
                           TextFieldPopup("User token", "", app.userToken ?? "",
                               (String value) async {
-                            APIService.instance.config.setUserToken(value);
+                            API.instance.config.setUserToken(value);
                             app.userToken = value;
                             setState(() {});
                           }));

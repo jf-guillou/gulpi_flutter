@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:gulpi/models/searchoption_model.dart';
-import 'package:gulpi/models/searchoptions_model.dart';
+import 'package:gulpi/services/cache_service.dart';
+import 'package:gulpi/utilities/item_types.dart';
 
 class SearchCriteria {
   int? field;
@@ -11,10 +12,17 @@ class SearchCriteria {
   bool? meta;
   String? itemtype;
   List<SearchCriteria>? criteria;
+  final ItemType _type;
   SearchOption? _s;
 
+  SearchCriteria(this._type);
+  SearchCriteria.meta(this._type) {
+    itemtype = _type.str;
+    meta = true;
+  }
+
   SearchCriteria uid(String uid) {
-    _s = SearchOptions.fromUid(uid);
+    _s = Cache.instance.searchOptions[_type]!.fromUid(uid);
     if (_s == null) {
       throw "Unknown search option";
     }

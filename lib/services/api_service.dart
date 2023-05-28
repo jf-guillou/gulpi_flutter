@@ -12,9 +12,9 @@ import 'package:gulpi/utilities/item_types.dart';
 import 'package:http/http.dart' as http;
 import 'package:gulpi/models/api_config_model.dart';
 
-class APIService {
-  APIService._instantiate();
-  static final APIService instance = APIService._instantiate();
+class API {
+  API._instantiate();
+  static final API instance = API._instantiate();
   static const prefix = 'apirest.php';
   late APIConfig config;
 

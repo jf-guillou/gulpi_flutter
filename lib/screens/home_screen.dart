@@ -8,6 +8,7 @@ import 'package:gulpi/models/searchoptions_model.dart';
 import 'package:gulpi/screens/scan_screen.dart';
 import 'package:gulpi/screens/settings_screen.dart';
 import 'package:gulpi/services/api_service.dart';
+import 'package:gulpi/services/cache_service.dart';
 import 'package:gulpi/utilities/exceptions.dart';
 import 'package:gulpi/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
@@ -51,9 +52,8 @@ class HomeScreen extends StatelessWidget {
   Future<bool> _load(BuildContext context) async {
     AppState app = Provider.of<AppState>(context, listen: false);
     await app.loadState();
-    APIService.instance.config = APIConfig.fromAppState(app);
-    if (!APIService.instance.config.hasUri() ||
-        !APIService.instance.config.hasAuth()) {
+    API.instance.config = APIConfig.fromAppState(app);
+    if (!API.instance.config.hasUri() || !API.instance.config.hasAuth()) {
       log("missing config, goto settings");
       // ignore: use_build_context_synchronously
       if (!context.mounted) return false;
@@ -62,26 +62,15 @@ class HomeScreen extends StatelessWidget {
     }
 
     try {
-      if (!APIService.instance.config.hasSession()) {
+      if (!API.instance.config.hasSession()) {
         log("missing session");
-        String? session = await APIService.instance.initSession();
+        String? session = await API.instance.initSession();
         if (session != null) {
           app.sessionToken = session;
         }
       }
 
-      if (app.searchOptions == null) {
-        log("missing searchOptions");
-        await APIService.instance.searchOptions();
-        app.searchOptions = SearchOptions.serialize();
-      } else {
-        SearchOptions.unserialize(app.searchOptions!);
-        if (SearchOptions.isStale()) {
-          log("stale searchOptions");
-          await APIService.instance.searchOptions();
-          app.searchOptions = SearchOptions.serialize();
-        }
-      }
+      await Cache.instance.load();
     } on AppTokenException {
       if (context.mounted) {
         _toSettings(context, "Wrong App token");

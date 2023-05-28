@@ -14,4 +14,8 @@ enum ItemType {
         return [];
     }
   }
+
+  static List<ItemType> searchable() {
+    return [computer];
+  }
 }
