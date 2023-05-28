@@ -25,7 +25,7 @@ class API {
     List<String> pathSegments = config.uri!.pathSegments.toList()
       ..add(prefix)
       ..addAll(segments);
-    log(pathSegments.toString());
+
     return config.uri!
         .replace(pathSegments: pathSegments, queryParameters: queryParameters);
   }
@@ -44,7 +44,6 @@ class API {
     if (config.appTokenHeader() != null) {
       h['App-Token'] = config.appTokenHeader()!;
     }
-    log(h.toString());
 
     return h;
   }
@@ -89,6 +88,7 @@ class API {
     log('initSession');
     var response =
         await http.get(uri(['initSession']), headers: headers(session: false));
+    log("statusCode:${response.statusCode}");
     if (response.statusCode == HttpStatus.ok) {
       Map<String, dynamic> j = json.decode(response.body);
       String? token = j['session_token'];
@@ -115,6 +115,7 @@ class API {
     //     .map((i, e) => MapEntry("forcedisplay[$i]", "$e")));
     var response =
         await http.get(uri(['search', type.str], query), headers: headers());
+    log("statusCode:${response.statusCode}");
     if (response.statusCode == HttpStatus.unauthorized) {
       throw AuthExpiredException();
     }
@@ -135,6 +136,7 @@ class API {
   Future<Item?> getItem(String id, {ItemType type = ItemType.computer}) async {
     log('getItem:$type:$id');
     var response = await http.get(uri([type.str, id]), headers: headers());
+    log("statusCode:${response.statusCode}");
     if (response.statusCode == HttpStatus.unauthorized) {
       throw AuthExpiredException();
     }
@@ -157,6 +159,7 @@ class API {
     log('searchOptions:$type');
     var response = await http.get(uri(['listSearchOptions', type.str]),
         headers: headers());
+    log("statusCode:${response.statusCode}");
     if (response.statusCode == HttpStatus.unauthorized) {
       throw AuthExpiredException();
     }
@@ -172,6 +175,7 @@ class API {
   Future<ItemStates> itemStates() async {
     log('itemStates');
     var response = await http.get(uri(['State']), headers: headers());
+    log("statusCode:${response.statusCode}");
     if (response.statusCode == HttpStatus.unauthorized) {
       throw AuthExpiredException();
     }
