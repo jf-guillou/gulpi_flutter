@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:developer';
 import 'package:gulpi/models/computer_model.dart';
 import 'package:gulpi/models/item_model.dart';
+import 'package:gulpi/models/itemstates_model.dart';
 import 'package:gulpi/models/paginable_model.dart';
 import 'package:gulpi/models/searchcriterion_model.dart';
 import 'package:gulpi/models/searchitem_model.dart';
@@ -161,6 +162,21 @@ class API {
     }
     if (response.statusCode == HttpStatus.ok) {
       return SearchOptions.fromJson(json.decode(response.body));
+    } else if (response.statusCode == HttpStatus.badRequest) {
+      throw _errorMessageToException(json.decode(response.body)[0]);
+    } else {
+      throw UnexpectedStatusCodeException(response.statusCode);
+    }
+  }
+
+  Future<ItemStates> itemStates() async {
+    log('itemStates');
+    var response = await http.get(uri(['State']), headers: headers());
+    if (response.statusCode == HttpStatus.unauthorized) {
+      throw AuthExpiredException();
+    }
+    if (response.statusCode == HttpStatus.ok) {
+      return ItemStates.fromJson(json.decode(response.body));
     } else if (response.statusCode == HttpStatus.badRequest) {
       throw _errorMessageToException(json.decode(response.body)[0]);
     } else {

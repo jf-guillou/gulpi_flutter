@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gulpi/models/computer_model.dart';
 import 'package:gulpi/screens/scan_screen.dart';
 import 'package:gulpi/services/api_service.dart';
+import 'package:gulpi/services/cache_service.dart';
 import 'package:gulpi/widgets/app_drawer.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -54,12 +55,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         ListTile(title: Text(l10n.assetTag(item.assetTag))),
                         ListTile(title: Text(l10n.name(item.name))),
                         ListTile(
-                            title: Text(l10n.status(item.state.toString())),
+                            title: Text(l10n.status(Cache.instance.itemStates!
+                                .getElementById(item.state)!
+                                .name)),
                             trailing: PopupMenuButton(
-                              itemBuilder: (context) => [
-                                PopupMenuItem(value: 1, child: Text(l10n.ok)),
-                                PopupMenuItem(value: 2, child: Text(l10n.ko)),
-                              ],
+                              itemBuilder: (context) => Cache
+                                  .instance.itemStates!.arr
+                                  .map((e) => PopupMenuItem(
+                                      value: e.id, child: Text(e.name)))
+                                  .toList(),
                             )),
                         FilledButton.tonal(
                             onPressed: () {}, child: Text(l10n.addNote)),
