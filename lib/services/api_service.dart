@@ -102,11 +102,15 @@ class APIService {
     }
   }
 
-  Future<Paginable<SearchItem>> searchItems(SearchCriterion crit,
+  Future<Paginable<SearchItem>> searchItems(SearchCriterion criterion,
       {ItemType type = ItemType.computer}) async {
-    log('searchItems:$type:$crit');
-    var query = crit.toUrlQuery();
-    query['uid_cols'] = "1";
+    log('searchItems:$type:$criterion');
+    var query = criterion.toUrlQuery();
+    // query['uid_cols'] = "1";
+    query['forcedisplay'] = "2";
+    // query.addAll(type.searchCols
+    //     .asMap()
+    //     .map((i, e) => MapEntry("forcedisplay[$i]", "$e")));
     var response =
         await http.get(uri(['search', type.str], query), headers: headers());
     if (response.statusCode == HttpStatus.unauthorized) {

@@ -55,6 +55,7 @@ class HomeScreen extends StatelessWidget {
     if (!APIService.instance.config.hasUri() ||
         !APIService.instance.config.hasAuth()) {
       log("missing config, goto settings");
+      // ignore: use_build_context_synchronously
       if (!context.mounted) return false;
       _toSettings(context, "Missing configuration");
       return false;
@@ -82,7 +83,9 @@ class HomeScreen extends StatelessWidget {
         }
       }
     } on AppTokenException {
-      _toSettings(context, "Wrong App token");
+      if (context.mounted) {
+        _toSettings(context, "Wrong App token");
+      }
     } catch (e) {
       log(e.toString());
       return false;

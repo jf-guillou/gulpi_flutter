@@ -2,7 +2,16 @@ enum ItemType {
   computer;
 
   @override
-  String toString() => name[0].toUpperCase() + name.substring(1);
+  String toString() => name;
 
-  get str => toString();
+  String get str => toString();
+
+  List<int> get searchCols {
+    switch (this) {
+      case computer:
+        return [1, 2, 5];
+      default:
+        return [];
+    }
+  }
 }

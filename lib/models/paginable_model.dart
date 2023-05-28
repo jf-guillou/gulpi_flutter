@@ -1,6 +1,6 @@
 import 'package:gulpi/models/base_model.dart';
 
-typedef Itemizer<S> = S Function(Map<String, dynamic>? item);
+typedef Itemizer<S> = S Function(Map<String, dynamic> item);
 
 class Paginable<T extends BaseModel> {
   late int totalcount;

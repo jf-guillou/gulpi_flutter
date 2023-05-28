@@ -123,6 +123,7 @@ class _ScanScreenState extends State<ScanScreen> {
             }
 
             if (id == null) {
+              // ignore: use_build_context_synchronously
               if (!context.mounted) {
                 return;
               }
@@ -181,6 +182,6 @@ class _ScanScreenState extends State<ScanScreen> {
       return null;
     }
 
-    return null;
+    return items.items.first.id;
   }
 }
