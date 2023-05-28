@@ -2,8 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:gulpi/models/item_model.dart';
+import 'package:gulpi/models/computer_model.dart';
 import 'package:gulpi/screens/scan_screen.dart';
+import 'package:gulpi/services/api_service.dart';
 import 'package:gulpi/widgets/app_drawer.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -17,36 +18,56 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class _InventoryScreenState extends State<InventoryScreen> {
-  final _item = Item.fromJson({"id": "1"});
-
   @override
   Widget build(BuildContext context) {
     log("InventoryScreen");
     AppLocalizations l10n = AppLocalizations.of(context)!;
-    _item.assetTag = widget.tag;
-    _item.name = "test-name";
-    _item.status = "OK";
     return Scaffold(
       appBar: AppBar(title: Text(l10n.inventory)),
       drawer: const AppDrawer(),
-      body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: ListView(
-            children: [
-              ListTile(title: Text(l10n.assetTag(_item.assetTag ?? ""))),
-              ListTile(title: Text(l10n.name(_item.name ?? ""))),
-              ListTile(
-                  title: Text(l10n.status(_item.status ?? "")),
-                  trailing: PopupMenuButton(
-                    itemBuilder: (context) => [
-                      PopupMenuItem(value: 1, child: Text(l10n.ok)),
-                      PopupMenuItem(value: 2, child: Text(l10n.ko)),
-                    ],
-                  )),
-              FilledButton.tonal(onPressed: () {}, child: Text(l10n.addNote)),
-              FilledButton(onPressed: () {}, child: Text(l10n.saveChanges)),
-            ],
-          )),
+      body: RefreshIndicator(
+          onRefresh: () async {
+            // FIXME : this triggers rebuild & double API call ?
+            await _getComputer(widget.id);
+            setState(() {});
+          },
+          child: FutureBuilder(
+              future: _getComputer(widget.id),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                      ],
+                    ),
+                  );
+                }
+
+                final Computer item = snapshot.data!;
+                item.assetTag = widget.tag;
+                return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ListView(
+                      children: [
+                        ListTile(title: Text(l10n.assetTag(item.assetTag))),
+                        ListTile(title: Text(l10n.name(item.name))),
+                        ListTile(
+                            title: Text(l10n.status(item.state.toString())),
+                            trailing: PopupMenuButton(
+                              itemBuilder: (context) => [
+                                PopupMenuItem(value: 1, child: Text(l10n.ok)),
+                                PopupMenuItem(value: 2, child: Text(l10n.ko)),
+                              ],
+                            )),
+                        FilledButton.tonal(
+                            onPressed: () {}, child: Text(l10n.addNote)),
+                        FilledButton(
+                            onPressed: () {}, child: Text(l10n.saveChanges)),
+                      ],
+                    ));
+              })),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -55,5 +76,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
           },
           child: const Icon(Icons.photo_camera_outlined)),
     );
+  }
+
+  Future<Computer?> _getComputer(String id) async {
+    return await APIService.instance.getItem(id) as Computer;
   }
 }

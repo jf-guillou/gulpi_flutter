@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
+import 'package:gulpi/models/computer_model.dart';
 import 'package:gulpi/models/item_model.dart';
 import 'package:gulpi/models/paginable_model.dart';
 import 'package:gulpi/models/searchcriterion_model.dart';
@@ -130,14 +131,19 @@ class APIService {
     }
   }
 
-  Future<Item> getItem(String id, {ItemType type = ItemType.computer}) async {
+  Future<Item?> getItem(String id, {ItemType type = ItemType.computer}) async {
     log('getItem:$type:$id');
     var response = await http.get(uri([type.str, id]), headers: headers());
     if (response.statusCode == HttpStatus.unauthorized) {
       throw AuthExpiredException();
     }
     if (response.statusCode == HttpStatus.ok) {
-      return Item.fromJson(json.decode(response.body));
+      switch (type) {
+        case ItemType.computer:
+          return Computer.fromJson(json.decode(response.body));
+        default:
+          return null;
+      }
     } else if (response.statusCode == HttpStatus.badRequest) {
       throw _errorMessageToException(json.decode(response.body)[0]);
     } else {
