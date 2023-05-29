@@ -58,18 +58,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               return;
                             }
                             API().config.setUrl(value);
-                            bool success = await API().checkUri();
-                            if (!success) {
-                              if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Cannot reach url'),
-                                ),
-                              );
-                              return;
-                            }
-                            app.url = value;
-                            setState(() {});
+                            setState(() {
+                              app.url = value;
+                            });
                           }));
                 },
               ),
@@ -84,8 +75,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           TextFieldPopup("App token", "", app.appToken ?? "",
                               (String value) async {
                             API().config.setAppToken(value);
-                            app.appToken = value;
-                            setState(() {});
+                            setState(() {
+                              app.appToken = value;
+                            });
                           }));
                 },
               ),
@@ -100,9 +92,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           TextFieldPopup("User token", "", app.userToken ?? "",
                               (String value) async {
                             API().config.setUserToken(value);
-                            app.userToken = value;
-                            setState(() {});
+                            setState(() {
+                              app.userToken = value;
+                            });
                           }));
+                },
+              ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.check),
+                title: Text('Validate server info'),
+                onPressed: (context) async {
+                  bool success = await API().checkUri();
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(success ? 'Yup' : 'Cannot reach url'),
+                    ),
+                  );
                 },
               ),
             ],
