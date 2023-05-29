@@ -18,6 +18,7 @@ class Computer extends Item {
     }
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       "name": name,

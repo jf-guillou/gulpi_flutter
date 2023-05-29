@@ -11,6 +11,7 @@ import 'package:gulpi/screens/scan_screen.dart';
 import 'package:gulpi/services/api_service.dart';
 import 'package:gulpi/utilities/item_types.dart';
 import 'package:gulpi/widgets/app_drawer.dart';
+import 'package:gulpi/widgets/searchcriteria_listtile.dart';
 
 class SearchScreen extends StatefulWidget {
   static const name = "SearchScreen";
@@ -21,6 +22,10 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final List<SearchCriterionListTile> _searchCriterion = [
+    const SearchCriterionListTile()
+  ];
+
   @override
   Widget build(BuildContext context) {
     AppLocalizations l10n = AppLocalizations.of(context)!;
@@ -31,22 +36,31 @@ class _SearchScreenState extends State<SearchScreen> {
           padding: const EdgeInsets.all(10.0),
           child: ListView(
             children: [
-              ListTile(title: Text("Name ?")),
-              FilledButton.tonal(
+              ..._searchCriterion,
+              ListTile(
+                  title: Row(children: [
+                FilledButton.tonal(
+                    onPressed: _addCriteria, child: const Icon(Icons.add)),
+                FilledButton.tonal(
+                    onPressed:
+                        _searchCriterion.length > 1 ? _removeCriteria : null,
+                    child: const Icon(Icons.remove))
+              ])),
+              FilledButton(
                   onPressed: () async {
                     log("_lookupGLPI");
 
                     String? id = await _lookupGLPI("1");
-                    if (id == null) {
+                    if (id == null || !mounted) {
                       return;
                     }
 
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => InventoryScreen("1234", id!),
+                        builder: (context) => InventoryScreen(id),
                         settings:
                             const RouteSettings(name: InventoryScreen.name)));
                   },
-                  child: Text("Search")),
+                  child: Text(l10n.search)),
             ],
           )),
       floatingActionButton: FloatingActionButton(
@@ -69,6 +83,18 @@ class _SearchScreenState extends State<SearchScreen> {
       return null;
     }
 
-    return null;
+    return items.items.first.id;
+  }
+
+  void _addCriteria() {
+    setState(() {
+      _searchCriterion.add(const SearchCriterionListTile());
+    });
+  }
+
+  void _removeCriteria() {
+    setState(() {
+      _searchCriterion.removeLast();
+    });
   }
 }

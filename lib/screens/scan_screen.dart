@@ -124,8 +124,7 @@ class _ScanScreenState extends State<ScanScreen> {
             }
 
             if (id == null) {
-              // ignore: use_build_context_synchronously
-              if (!context.mounted) {
+              if (!mounted) {
                 return;
               }
               // Remove AlertDialog
@@ -137,8 +136,7 @@ class _ScanScreenState extends State<ScanScreen> {
             }
 
             log("Lookup result $id");
-            // ignore: use_build_context_synchronously
-            if (!context.mounted) {
+            if (!mounted) {
               return;
             }
             // Remove AlertDialog
@@ -152,7 +150,7 @@ class _ScanScreenState extends State<ScanScreen> {
             }
 
             Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => InventoryScreen(rawBarcode, id!),
+                builder: (context) => InventoryScreen(id!),
                 settings: const RouteSettings(name: InventoryScreen.name)));
             return;
           }

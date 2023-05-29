@@ -30,7 +30,7 @@ class SearchCriteria {
     return this;
   }
 
-  SearchCriteria _searchType(String type) {
+  SearchCriteria searchType(String type) {
     if (_s == null) {
       throw "Unknown search option";
     }
@@ -41,7 +41,7 @@ class SearchCriteria {
   }
 
   SearchCriteria contains(String str) {
-    _searchType("contains");
+    searchType("contains");
     value = str;
     return this;
   }

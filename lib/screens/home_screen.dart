@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gulpi/models/api_config_model.dart';
 import 'package:gulpi/models/appstate_model.dart';
-import 'package:gulpi/models/searchoptions_model.dart';
 import 'package:gulpi/screens/scan_screen.dart';
 import 'package:gulpi/screens/settings_screen.dart';
 import 'package:gulpi/services/api_service.dart';

@@ -11,9 +11,8 @@ import 'package:gulpi/widgets/note_card.dart';
 
 class InventoryScreen extends StatefulWidget {
   static const name = "InventoryScreen";
-  final String tag;
   final String id;
-  const InventoryScreen(this.tag, this.id, {super.key});
+  const InventoryScreen(this.id, {super.key});
 
   @override
   State<InventoryScreen> createState() => _InventoryScreenState();
@@ -61,7 +60,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                     .getElementById(_item!.state)!
                                     .name),
                                 style: _item!.state != _remoteItem!.state
-                                    ? TextStyle(fontWeight: FontWeight.bold)
+                                    ? const TextStyle(
+                                        fontWeight: FontWeight.bold)
                                     : null),
                             trailing: PopupMenuButton(
                               onSelected: (v) {
@@ -77,12 +77,13 @@ class _InventoryScreenState extends State<InventoryScreen> {
                             )),
                         _item!.notes != null && _item!.notes!.isNotEmpty
                             ? NoteCard(_item!.notes!.first.content)
-                            : SizedBox(),
+                            : const SizedBox(),
                         FilledButton.tonal(
                             onPressed: () {}, child: Text(l10n.addNote)),
                         FilledButton(
                             onPressed: () async {
                               if (await _saveChanges(widget.id) && mounted) {
+                                // ignore: use_build_context_synchronously
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(l10n.changesSaved)));
                               }
@@ -111,7 +112,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   Future<Computer?> _fetchComputer(String id) async {
     Computer item = await API.instance.getItem(id) as Computer;
-    item.assetTag = widget.tag;
     setState(() {
       _item = item;
     });
