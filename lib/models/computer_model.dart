@@ -2,14 +2,12 @@ import 'package:gulpi/models/item_model.dart';
 import 'package:gulpi/models/note_model.dart';
 
 class Computer extends Item {
-  late String name;
   late String serial;
   late String assetTag;
   late int state;
   List<Note>? notes;
 
   Computer.fromJson(Map<String, dynamic> json) : super.fromJson(json) {
-    name = json['name'];
     serial = json['serial'];
     assetTag = json['otherserial'];
     state = json['states_id'];
@@ -21,7 +19,7 @@ class Computer extends Item {
   @override
   Map<String, dynamic> toJson() {
     return {
-      "name": name,
+      ...super.toJson(),
       "serial": serial,
       "otherserial": assetTag,
       "states_id": state,

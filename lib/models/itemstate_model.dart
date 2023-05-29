@@ -1,16 +1,10 @@
-class ItemState {
-  late int id;
-  late String name;
+import 'package:gulpi/models/item_model.dart';
 
-  ItemState.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-  }
+class ItemState extends Item {
+  ItemState.fromJson(Map<String, dynamic> json) : super.fromJson(json) {}
 
-  Map toJson() {
-    return {
-      "id": id,
-      "name": name,
-    };
+  @override
+  Map<String, dynamic> toJson() {
+    return {...super.toJson()};
   }
 }
