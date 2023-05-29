@@ -176,7 +176,7 @@ class _ScanScreenState extends State<ScanScreen> {
     c.add(SearchCriteria(c.type).uid("Computer.name").contains(id));
     c.add(SearchCriteria(c.type).or().uid("Computer.serial").contains(id));
     c.add(SearchCriteria(c.type).or().uid("Computer.otherserial").contains(id));
-    Paginable<SearchItem> items = await API.instance.searchItems(c);
+    Paginable<SearchItem> items = await API().searchItems(c);
     if (items.count == 0) {
       return null;
     }

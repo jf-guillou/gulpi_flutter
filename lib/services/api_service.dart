@@ -15,9 +15,11 @@ import 'package:gulpi/models/api_config_model.dart';
 
 class API {
   API._instantiate();
-  static final API instance = API._instantiate();
+  static final API _instance = API._instantiate();
   static const prefix = 'apirest.php';
   late APIConfig config;
+
+  factory API() => _instance;
 
   Uri uri(List<String> segments, [Map<String, dynamic>? queryParameters]) {
     assert(config.hasUri());

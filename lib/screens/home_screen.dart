@@ -51,8 +51,8 @@ class HomeScreen extends StatelessWidget {
   Future<bool> _load(BuildContext context) async {
     AppState app = Provider.of<AppState>(context, listen: false);
     await app.loadState();
-    API.instance.config = APIConfig.fromAppState(app);
-    if (!API.instance.config.hasUri() || !API.instance.config.hasAuth()) {
+    API().config = APIConfig.fromAppState(app);
+    if (!API().config.hasUri() || !API().config.hasAuth()) {
       log("missing config, goto settings");
       // ignore: use_build_context_synchronously
       if (!context.mounted) return false;
@@ -61,15 +61,15 @@ class HomeScreen extends StatelessWidget {
     }
 
     try {
-      if (!API.instance.config.hasSession()) {
+      if (!API().config.hasSession()) {
         log("missing session");
-        String? session = await API.instance.initSession();
+        String? session = await API().initSession();
         if (session != null) {
           app.sessionToken = session;
         }
       }
 
-      await Cache.instance.load();
+      await Cache().load();
     } on AppTokenException {
       if (context.mounted) {
         _toSettings(context, "Wrong App token");

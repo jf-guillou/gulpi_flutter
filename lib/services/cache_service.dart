@@ -7,10 +7,12 @@ import 'package:gulpi/utilities/item_types.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Cache {
-  static final Cache instance = Cache._instantiate();
+  static final Cache _instance = Cache._instantiate();
   Cache._instantiate();
   final Map<ItemType, SearchOptions?> searchOptions = {};
   ItemStates? itemStates;
+
+  factory Cache() => _instance;
 
   Future<void> load() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -23,7 +25,7 @@ class Cache {
         searchOptions[it] = SearchOptions.unserialize(prefs.getString(key)!);
       }
       if (searchOptions[it] == null || searchOptions[it]!.isStale()) {
-        searchOptions[it] = await API.instance.searchOptions();
+        searchOptions[it] = await API().searchOptions();
         prefs.setString(key, searchOptions[it]!.serialize());
       }
     }
@@ -35,7 +37,7 @@ class Cache {
       itemStates = ItemStates.unserialize(prefs.getString(key)!);
     }
     if (itemStates == null || itemStates!.isStale()) {
-      itemStates = await API.instance.itemStates();
+      itemStates = await API().itemStates();
       prefs.setString(key, itemStates!.serialize());
     }
   }

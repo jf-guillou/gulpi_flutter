@@ -22,7 +22,7 @@ class SearchCriteria {
   }
 
   SearchCriteria uid(String uid) {
-    _s = Cache.instance.searchOptions[_type]!.fromUid(uid);
+    _s = Cache().searchOptions[_type]!.fromUid(uid);
     if (_s == null) {
       throw "Unknown search option";
     }

@@ -56,7 +56,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         ListTile(title: Text(l10n.name(_item!.name))),
                         ListTile(
                             title: Text(
-                                l10n.status(Cache.instance.itemStates!
+                                l10n.status(Cache()
+                                    .itemStates!
                                     .getElementById(_item!.state)!
                                     .name),
                                 style: _item!.state != _remoteItem!.state
@@ -69,8 +70,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                   _item!.state = v;
                                 });
                               },
-                              itemBuilder: (context) => Cache
-                                  .instance.itemStates!.arr
+                              itemBuilder: (context) => Cache()
+                                  .itemStates!
+                                  .arr
                                   .map((e) => PopupMenuItem(
                                       value: e.id, child: Text(e.name)))
                                   .toList(),
@@ -111,7 +113,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
 
   Future<Computer?> _fetchComputer(String id) async {
-    Computer item = await API.instance.getItem(id) as Computer;
+    Computer item = await API().getItem(id) as Computer;
     setState(() {
       _item = item;
     });
@@ -125,7 +127,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     if (fields.isEmpty) {
       return false;
     }
-    bool saved = await API.instance.updateItem(id, fields);
+    bool saved = await API().updateItem(id, fields);
     await _fetchComputer(id);
     return saved;
   }
