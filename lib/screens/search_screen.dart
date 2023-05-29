@@ -36,6 +36,7 @@ class _SearchScreenState extends State<SearchScreen> {
           padding: const EdgeInsets.all(10.0),
           child: ListView(
             children: [
+              // TODO: setup onChange in SearchCriterionListTile
               ..._searchCriterion,
               ListTile(
                   title: Row(children: [
@@ -48,14 +49,16 @@ class _SearchScreenState extends State<SearchScreen> {
               ])),
               FilledButton(
                   onPressed: () async {
-                    log("_lookupGLPI");
-
-                    String? id = await _lookupGLPI("1");
+                    SearchCriterion c = SearchCriterion(ItemType.computer);
+                    c.add(SearchCriteria(c.type)
+                        .uid("Computer.name")
+                        .contains(""));
+                    String? id = await _lookupGLPI(c);
                     if (id == null || !mounted) {
                       return;
                     }
 
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => InventoryScreen(id),
                         settings:
                             const RouteSettings(name: InventoryScreen.name)));
@@ -73,12 +76,9 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Future<String?> _lookupGLPI(String id) async {
-    SearchCriterion c = SearchCriterion(ItemType.computer);
-    c.add(SearchCriteria(c.type).uid("Computer.name").contains(id));
-    c.add(SearchCriteria(c.type).or().uid("Computer.serial").contains(id));
-    c.add(SearchCriteria(c.type).or().uid("Computer.otherserial").contains(id));
-    Paginable<SearchItem> items = await API().searchItems(c);
+  Future<String?> _lookupGLPI(SearchCriterion sc) async {
+    log("_lookupGLPI");
+    Paginable<SearchItem> items = await API().searchItems(sc);
     if (items.count == 0) {
       return null;
     }

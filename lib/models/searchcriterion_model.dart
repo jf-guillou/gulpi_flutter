@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:gulpi/models/searchcriteria_model.dart';
 import 'package:gulpi/utilities/item_types.dart';
 
@@ -26,5 +28,14 @@ class SearchCriterion {
     }
 
     return qs;
+  }
+
+  @override
+  String toString() {
+    return json.encode(toJson());
+  }
+
+  Map<String, dynamic> toJson() {
+    return {"criterion": _arr};
   }
 }

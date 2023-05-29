@@ -149,7 +149,7 @@ class _ScanScreenState extends State<ScanScreen> {
               continue;
             }
 
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
+            Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => InventoryScreen(id!),
                 settings: const RouteSettings(name: InventoryScreen.name)));
             return;

@@ -22,7 +22,7 @@ class SearchCriteria {
   }
 
   SearchCriteria uid(String uid) {
-    _s = Cache().searchOptions[_type]!.fromUid(uid);
+    _s = Cache().searchOptions[_type]!.getByUid(uid);
     if (_s == null) {
       throw "Unknown search option";
     }
@@ -61,7 +61,7 @@ class SearchCriteria {
     return json.encode(toJson());
   }
 
-  Map toJson() {
+  Map<String, dynamic> toJson() {
     return {
       "field": field,
       "searchtype": searchtype,

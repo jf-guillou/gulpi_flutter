@@ -28,8 +28,10 @@ class Paginable<T extends BaseModel> {
     range = json['content-range'];
     items = [];
 
-    for (var item in json['data']) {
-      items.add(itemizer(item));
+    if (json['data'] != null) {
+      for (var item in json['data']) {
+        items.add(itemizer(item));
+      }
     }
   }
 

@@ -23,7 +23,11 @@ class SearchOptions {
     });
   }
 
-  SearchOption? fromUid(String uid) {
+  SearchOption? getById(int id) {
+    return arr.where((e) => e.id == id).firstOrNull;
+  }
+
+  SearchOption? getByUid(String uid) {
     return arr.where((e) => e.uid == uid).firstOrNull;
   }
 
