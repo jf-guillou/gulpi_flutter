@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
 import 'package:gulpi/models/computer_model.dart';
+import 'package:gulpi/models/item_collection.dart';
 import 'package:gulpi/models/item_model.dart';
-import 'package:gulpi/models/itemstates_model.dart';
+import 'package:gulpi/models/itemstate_model.dart';
 import 'package:gulpi/models/paginable_model.dart';
 import 'package:gulpi/models/searchcriterion_model.dart';
 import 'package:gulpi/models/searchitem_model.dart';
@@ -194,7 +195,7 @@ class API {
     }
   }
 
-  Future<ItemStates> itemStates() async {
+  Future<ItemCollection<ItemState>> itemStates() async {
     log('itemStates');
     var response = await http.get(uri(['State']), headers: headers());
     log("statusCode:${response.statusCode}");
@@ -202,7 +203,8 @@ class API {
       throw AuthExpiredException();
     }
     if (response.statusCode == HttpStatus.ok) {
-      return ItemStates.fromJson(json.decode(response.body));
+      return ItemCollection<ItemState>.fromJson(
+          json.decode(response.body), ItemState.fromJson);
     } else if (response.statusCode == HttpStatus.badRequest) {
       throw _errorMessageToException(json.decode(response.body)[0]);
     } else {
