@@ -25,7 +25,7 @@ class _ScanScreenState extends State<ScanScreen> {
   bool _hasActiveLookup = false;
 
   final MobileScannerController cameraController = MobileScannerController(
-    detectionSpeed: DetectionSpeed.normal,
+    detectionSpeed: DetectionSpeed.noDuplicates,
     facing: CameraFacing.back,
     torchEnabled: false,
   );
