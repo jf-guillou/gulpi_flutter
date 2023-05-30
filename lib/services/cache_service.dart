@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:gulpi/models/computermodel_model.dart';
 import 'package:gulpi/models/item_collection.dart';
 import 'package:gulpi/models/itemstate_model.dart';
+import 'package:gulpi/models/manufacturer_model.dart';
 import 'package:gulpi/models/searchoptions_model.dart';
 import 'package:gulpi/services/api_service.dart';
 import 'package:gulpi/utilities/item_types.dart';
@@ -12,6 +14,8 @@ class Cache {
   Cache._instantiate();
   final Map<ItemType, SearchOptions?> searchOptions = {};
   ItemCollection<ItemState>? itemStates;
+  ItemCollection<ComputerModel>? computerModels;
+  ItemCollection<Manufacturer>? manufacturers;
 
   factory Cache() => _instance;
 
@@ -32,7 +36,7 @@ class Cache {
     }
 
     // States
-    log('Cache.States');
+    log('Cache.ItemState');
     String key = 'itemstates';
     if (prefs.containsKey(key)) {
       itemStates = ItemCollection<ItemState>.unserialize(
@@ -41,6 +45,31 @@ class Cache {
     if (itemStates == null || itemStates!.isStale()) {
       itemStates = await API().itemStates();
       prefs.setString(key, itemStates!.serialize());
+    }
+
+    // ComputerModels
+    log('Cache.ComputerModel');
+    key = 'computermodels';
+    if (prefs.containsKey(key)) {
+      computerModels = ItemCollection<ComputerModel>.unserialize(
+          prefs.getString(key)!, ComputerModel.fromJson);
+    }
+    if (computerModels == null || computerModels!.isStale()) {
+      computerModels = await API().computerModels();
+      prefs.setString(key, computerModels!.serialize());
+    }
+
+    // Manufacturers
+    log('Cache.Manufacturer');
+    key = 'manufacturers';
+    if (prefs.containsKey(key)) {
+      manufacturers = ItemCollection<Manufacturer>.unserialize(
+          prefs.getString(key)!, Manufacturer.fromJson);
+    }
+    manufacturers = null;
+    if (manufacturers == null || manufacturers!.isStale()) {
+      manufacturers = await API().manufacturers();
+      prefs.setString(key, manufacturers!.serialize());
     }
   }
 }

@@ -77,6 +77,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                       value: e.id, child: Text(e.name)))
                                   .toList(),
                             )),
+                        ListTile(
+                            title: Text(Cache()
+                                .manufacturers!
+                                .getElementById(_item!.manufacturer)!
+                                .name)),
+                        ListTile(
+                            title: Text(Cache()
+                                .computerModels!
+                                .getElementById(_item!.model)!
+                                .name)),
                         _item!.notes != null && _item!.notes!.isNotEmpty
                             ? NoteCard(_item!.notes!.first.content)
                             : const SizedBox(),

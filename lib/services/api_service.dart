@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
 import 'package:gulpi/models/computer_model.dart';
+import 'package:gulpi/models/computermodel_model.dart';
 import 'package:gulpi/models/item_collection.dart';
 import 'package:gulpi/models/item_model.dart';
 import 'package:gulpi/models/itemstate_model.dart';
+import 'package:gulpi/models/manufacturer_model.dart';
 import 'package:gulpi/models/paginable_model.dart';
 import 'package:gulpi/models/searchcriterion_model.dart';
 import 'package:gulpi/models/searchitem_model.dart';
@@ -205,6 +207,40 @@ class API {
     if (response.statusCode == HttpStatus.ok) {
       return ItemCollection<ItemState>.fromJson(
           json.decode(response.body), ItemState.fromJson);
+    } else if (response.statusCode == HttpStatus.badRequest) {
+      throw _errorMessageToException(json.decode(response.body)[0]);
+    } else {
+      throw UnexpectedStatusCodeException(response.statusCode);
+    }
+  }
+
+  Future<ItemCollection<ComputerModel>> computerModels() async {
+    log('computerModels');
+    var response = await http.get(uri(['ComputerModel']), headers: headers());
+    log("statusCode:${response.statusCode}");
+    if (response.statusCode == HttpStatus.unauthorized) {
+      throw AuthExpiredException();
+    }
+    if (response.statusCode == HttpStatus.ok) {
+      return ItemCollection<ComputerModel>.fromJson(
+          json.decode(response.body), ComputerModel.fromJson);
+    } else if (response.statusCode == HttpStatus.badRequest) {
+      throw _errorMessageToException(json.decode(response.body)[0]);
+    } else {
+      throw UnexpectedStatusCodeException(response.statusCode);
+    }
+  }
+
+  Future<ItemCollection<Manufacturer>> manufacturers() async {
+    log('computerModels');
+    var response = await http.get(uri(['Manufacturer']), headers: headers());
+    log("statusCode:${response.statusCode}");
+    if (response.statusCode == HttpStatus.unauthorized) {
+      throw AuthExpiredException();
+    }
+    if (response.statusCode == HttpStatus.ok) {
+      return ItemCollection<Manufacturer>.fromJson(
+          json.decode(response.body), Manufacturer.fromJson);
     } else if (response.statusCode == HttpStatus.badRequest) {
       throw _errorMessageToException(json.decode(response.body)[0]);
     } else {
