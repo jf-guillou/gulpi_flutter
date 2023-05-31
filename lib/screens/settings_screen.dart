@@ -26,35 +26,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: SettingsList(
         sections: [
           SettingsSection(
-            title: Text('Common'),
-            tiles: <SettingsTile>[
-              SettingsTile.navigation(
-                leading: const Icon(Icons.language),
-                title: Text(l10n.language),
-                value: Text('English'),
-              ),
-            ],
-          ),
-          SettingsSection(
-            title: Text('Server'),
+            title: Text(l10n.server),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: const Icon(Icons.link),
-                title: Text('GLPI server URL'),
-                value: Text(app.url ?? "(not set)"),
+                title: Text(l10n.glpiServerUrl),
+                value: Text(app.url ?? l10n.notSet),
                 onPressed: (context) {
                   showDialog(
                       context: context,
                       builder: (context) => TextFieldPopup(
-                              "GLPI server URL",
+                              l10n.glpiServerUrl,
                               "https://glpi.example.com",
                               app.url ?? "", (String value) async {
                             if (!_urlValidator(value)) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Malformed url'),
-                                ),
-                              );
+                                  SnackBar(content: Text(l10n.malformedUrl)));
                               return;
                             }
                             API().config.setUrl(value);
@@ -66,13 +53,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.lock_outline),
-                title: Text('App token'),
-                value: Text(app.appToken ?? '(not set)'),
+                title: Text(l10n.appToken),
+                value: Text(app.appToken ?? l10n.notSet),
                 onPressed: (context) {
                   showDialog(
                       context: context,
-                      builder: (context) =>
-                          TextFieldPopup("App token", "", app.appToken ?? "",
+                      builder: (context) => TextFieldPopup(
+                              l10n.appToken, "", app.appToken ?? l10n.notSet,
                               (String value) async {
                             API().config.setAppToken(value);
                             setState(() {
@@ -83,13 +70,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.lock_outline),
-                title: Text('User token'),
-                value: Text(app.userToken ?? '(not set)'),
+                title: Text(l10n.userToken),
+                value: Text(app.userToken ?? l10n.notSet),
                 onPressed: (context) {
                   showDialog(
                       context: context,
-                      builder: (context) =>
-                          TextFieldPopup("User token", "", app.userToken ?? "",
+                      builder: (context) => TextFieldPopup(
+                              l10n.userToken, '', app.userToken ?? l10n.notSet,
                               (String value) async {
                             API().config.setUserToken(value);
                             setState(() {
@@ -100,15 +87,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.check),
-                title: Text('Validate server info'),
+                title: Text(l10n.validateServerInfo),
                 onPressed: (context) async {
                   bool success = await API().checkUri();
                   if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(success ? 'Yup' : 'Cannot reach url'),
-                    ),
-                  );
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(success ? l10n.ok : l10n.cannotReachUrl)));
                 },
               ),
             ],

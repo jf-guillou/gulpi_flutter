@@ -1,5 +1,6 @@
 {
   "addNote": "Add note",
+  "appToken": "App token",
   "assetTag": "Tag: {tag}",
   "@assetTag": {
     "description": "Asset tag",
@@ -10,7 +11,9 @@
       }
     }
   },
+  "cannotReachUrl": "Cannot reach URL",
   "changesSaved": "Changes saved",
+  "glpiServerUrl": "GLPI server URL",
   "home": "Home",
   "inventory": "Inventory",
   "ko": "KO",
@@ -25,6 +28,7 @@
       }
     }
   },
+  "malformedUrl": "Malformed url",
   "name": "Name: {name}",
   "@name": {
     "description": "Name",
@@ -37,10 +41,12 @@
   },
   "noResults": "No results",
   "notFound": "Not found",
+  "notSet": "(not set)",
   "ok": "OK",
   "saveChanges": "Save changes",
   "scan": "Scan",
   "search": "Search",
+  "server": "Server",
   "settings": "Settings",
   "status": "Status: {status}",
   "@status": {
@@ -50,5 +56,7 @@
         "example": "OK"
       }
     }
-  }
+  },
+  "userToken": "User token",
+  "validateServerInfo": "Validate server info"
 }

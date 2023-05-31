@@ -1,7 +1,10 @@
 {
   "addNote": "Ajouter une note",
+  "appToken": "App token",
   "assetTag": "Tag : {tag}",
+  "cannotReachUrl": "URL injoignable",
   "changesSaved": "Modifications enregistrées",
+  "glpiServerUrl": "URL du serveur GLPI",
   "home": "Accueil",
   "inventory": "Inventaire",
   "ko": "KO",
@@ -9,20 +12,18 @@
   "loading": "Loading",
   "lookupFailed": "Echec de la recherche",
   "lookupInGLPI": "Recherche de {rawbarcode} dans GLPI",
-  "@lookupInGLPI": {
-    "placeholders": {
-      "rawbarcode": {
-        "type": "String"
-      }
-    }
-  },
+  "malformedUrl": "URL incorrecte",
   "name": "Nom : {name}",
   "noResults": "Pas de résultats",
   "notFound": "Introuvable",
+  "notSet": "(indéfini)",
   "ok": "OK",
   "saveChanges": "Enregistrer les modifications",
   "scan": "Scan",
   "search": "Rechercher",
+  "server": "Serveur",
   "settings": "Paramètres",
-  "status": "Statut : {status}"
+  "status": "Statut : {status}",
+  "userToken": "User token",
+  "validateServerInfo": "Valider les informations du serveur"
 }
