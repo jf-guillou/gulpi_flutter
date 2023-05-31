@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TextFieldPopup extends StatefulWidget {
   final String header;
@@ -23,6 +24,7 @@ class TextFieldPopupState extends State<TextFieldPopup> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations l10n = AppLocalizations.of(context)!;
     return AlertDialog(
       title: Text(widget.header),
       content: TextFormField(
@@ -34,13 +36,13 @@ class TextFieldPopupState extends State<TextFieldPopup> {
       ),
       actions: <Widget>[
         TextButton(
-          child: const Text('CANCEL'),
+          child: Text(l10n.cancel.toUpperCase()),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         TextButton(
-          child: const Text('OK'),
+          child: Text(l10n.ok.toUpperCase()),
           onPressed: () {
             widget.onchange(textFieldValue);
             Navigator.pop(context);

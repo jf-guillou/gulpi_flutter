@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gulpi/models/searchcriteria_model.dart';
 import 'package:gulpi/services/cache_service.dart';
 import 'package:gulpi/utilities/item_types.dart';
@@ -19,6 +20,7 @@ class _SearchCriterionListTileState extends State<SearchCriterionListTile> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations l10n = AppLocalizations.of(context)!;
     return ListTile(
         title: Row(
       children: [
@@ -39,7 +41,7 @@ class _SearchCriterionListTileState extends State<SearchCriterionListTile> {
                 .map((e) => PopupMenuItem(value: e.id, child: Text(e.name)))
                 .toList(),
             child: Padding(
-                padding: EdgeInsets.all(2.0),
+                padding: const EdgeInsets.all(2.0),
                 child: Text(Cache()
                     .searchOptions[ItemType.computer]!
                     .getById(c.field!)!
@@ -59,11 +61,12 @@ class _SearchCriterionListTileState extends State<SearchCriterionListTile> {
                     .toList()
                 : List<PopupMenuItem>.empty(),
             child: Padding(
-                padding: EdgeInsets.all(2.0), child: Text(c.searchtype ?? ""))),
-        const Expanded(
+                padding: const EdgeInsets.all(2.0),
+                child: Text(c.searchtype ?? ""))),
+        Expanded(
           child: TextField(
             decoration: InputDecoration(
-              hintText: 'Enter a search term',
+              hintText: l10n.search,
             ),
           ),
         )

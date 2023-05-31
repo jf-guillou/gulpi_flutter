@@ -11,12 +11,12 @@
       }
     }
   },
+  "cancel": "Cancel",
   "cannotReachUrl": "Cannot reach URL",
   "changesSaved": "Changes saved",
   "glpiServerUrl": "GLPI server URL",
   "home": "Home",
   "inventory": "Inventory",
-  "ko": "KO",
   "language": "Language",
   "loading": "Chargement",
   "lookupFailed": "Lookup failed",
@@ -40,6 +40,7 @@
     }
   },
   "noResults": "No results",
+  "note": "Note",
   "notFound": "Not found",
   "notSet": "(not set)",
   "ok": "OK",
