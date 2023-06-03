@@ -70,9 +70,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ListTile(title: Text(l10n.name(item.name))),
             ListTile(
                 title: Text(
-                    l10n.status(
-                        Cache().itemStates.getElementById(item.state)?.name ??
-                            l10n.unknown),
+                    l10n.status(Cache().itemStates.getById(item.state)?.name ??
+                        l10n.unknown),
                     style: item.state != remoteItem.state
                         ? const TextStyle(fontWeight: FontWeight.bold)
                         : null),
@@ -92,12 +91,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(Cache()
-                        .manufacturers
-                        .getElementById(item.manufacturer)
-                        ?.name ??
+                Text(Cache().manufacturers.getById(item.manufacturer)?.name ??
                     l10n.unknown),
-                Text(Cache().computerModels.getElementById(item.model)?.name ??
+                Text(Cache().computerModels.getById(item.model)?.name ??
                     l10n.unknown),
               ],
             ),

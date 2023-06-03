@@ -23,7 +23,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final List<SearchCriterionListTile> _searchCriterion = [
-    const SearchCriterionListTile()
+    const SearchCriterionListTile(position: 0)
   ];
 
   @override
@@ -88,7 +88,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _addCriteria() {
     setState(() {
-      _searchCriterion.add(const SearchCriterionListTile());
+      _searchCriterion
+          .add(SearchCriterionListTile(position: _searchCriterion.length));
     });
   }
 

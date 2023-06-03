@@ -5,7 +5,8 @@ import 'package:gulpi/services/cache_service.dart';
 import 'package:gulpi/utilities/item_types.dart';
 
 class SearchCriterionListTile extends StatefulWidget {
-  const SearchCriterionListTile({super.key});
+  final int position;
+  const SearchCriterionListTile({required this.position, super.key});
 
   @override
   State<SearchCriterionListTile> createState() =>
@@ -24,6 +25,20 @@ class _SearchCriterionListTileState extends State<SearchCriterionListTile> {
     return ListTile(
         title: Row(
       children: [
+        widget.position > 0
+            ? PopupMenuButton(
+                onSelected: (v) {
+                  setState(() {
+                    c.link = v;
+                  });
+                },
+                itemBuilder: (context) => SearchLink.all()
+                    .map((e) => PopupMenuItem(value: e, child: Text(e.str())))
+                    .toList(),
+                child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(c.link.str())))
+            : const SizedBox(),
         PopupMenuButton(
             onSelected: (v) {
               setState(() {
@@ -63,13 +78,9 @@ class _SearchCriterionListTileState extends State<SearchCriterionListTile> {
             child: Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: Text(c.searchtype ?? ""))),
-        Expanded(
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: l10n.search,
-            ),
-          ),
-        )
+        const Expanded(
+            child: TextField(
+                decoration: InputDecoration(enabledBorder: InputBorder.none)))
       ],
     ));
   }

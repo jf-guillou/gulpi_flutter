@@ -35,7 +35,7 @@ class Paginable<T extends SearchItem> {
     }
   }
 
-  // T? getElementById(String? id) {}
+  // T? getById(String? id) {}
 
   Paginable<T> mergeWith(Paginable<T> p) {
     totalcount = p.totalcount;

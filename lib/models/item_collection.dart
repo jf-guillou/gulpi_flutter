@@ -38,7 +38,7 @@ class ItemCollection<T extends Item> {
     });
   }
 
-  T? getElementById(int id) {
+  T? getById(int id) {
     return arr.where((e) => e.id == id).firstOrNull;
   }
 }

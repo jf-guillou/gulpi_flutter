@@ -8,7 +8,7 @@ class SearchCriteria {
   int? field;
   String? searchtype;
   String? value;
-  String? link;
+  SearchLink link = SearchLink.and;
   bool? meta;
   String? itemtype;
   List<SearchCriteria>? criteria;
@@ -47,12 +47,12 @@ class SearchCriteria {
   }
 
   SearchCriteria or() {
-    link = "OR";
+    link = SearchLink.or;
     return this;
   }
 
   SearchCriteria and() {
-    link = "AND";
+    link = SearchLink.and;
     return this;
   }
 
@@ -66,10 +66,36 @@ class SearchCriteria {
       "field": field,
       "searchtype": searchtype,
       "value": value,
-      "link": link,
+      "link": link.str(),
       "meta": meta,
       "itemtype": itemtype,
       "criteria": criteria,
     };
+  }
+}
+
+enum SearchLink {
+  and,
+  or,
+  andNot,
+  orNot;
+
+  String str() {
+    switch (this) {
+      case and:
+        return "AND";
+      case or:
+        return "OR";
+      case andNot:
+        return "AND NOT";
+      case orNot:
+        return "OR NOT";
+      default:
+        return "";
+    }
+  }
+
+  static List<SearchLink> all() {
+    return [and, or, andNot, orNot];
   }
 }
