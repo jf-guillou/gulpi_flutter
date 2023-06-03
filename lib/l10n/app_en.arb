@@ -58,6 +58,7 @@
       }
     }
   },
+  "unknown": "Unknown",
   "userToken": "User token",
   "validateServerInfo": "Validate server info"
 }

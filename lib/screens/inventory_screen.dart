@@ -48,7 +48,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   );
                 }
 
-                return _inventoryView();
+                return _inventoryView(_item!, _remoteItem!);
               })),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -60,29 +60,30 @@ class _InventoryScreenState extends State<InventoryScreen> {
     );
   }
 
-  Widget _inventoryView() {
+  Widget _inventoryView(Computer item, Computer remoteItem) {
     AppLocalizations l10n = AppLocalizations.of(context)!;
     return Padding(
         padding: const EdgeInsets.all(10.0),
         child: ListView(
           children: [
-            ListTile(title: Text(l10n.assetTag(_item!.assetTag))),
-            ListTile(title: Text(l10n.name(_item!.name))),
+            ListTile(title: Text(l10n.assetTag(item.assetTag))),
+            ListTile(title: Text(l10n.name(item.name))),
             ListTile(
                 title: Text(
                     l10n.status(
-                        Cache().itemStates!.getElementById(_item!.state)!.name),
-                    style: _item!.state != _remoteItem!.state
+                        Cache().itemStates.getElementById(item.state)?.name ??
+                            l10n.unknown),
+                    style: item.state != remoteItem.state
                         ? const TextStyle(fontWeight: FontWeight.bold)
                         : null),
                 trailing: PopupMenuButton(
                   onSelected: (v) {
                     setState(() {
-                      _item!.state = v;
+                      item.state = v;
                     });
                   },
                   itemBuilder: (context) => Cache()
-                      .itemStates!
+                      .itemStates
                       .arr
                       .map((e) =>
                           PopupMenuItem(value: e.id, child: Text(e.name)))
@@ -92,16 +93,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(Cache()
-                    .manufacturers!
-                    .getElementById(_item!.manufacturer)!
-                    .name),
-                Text(
-                    Cache().computerModels!.getElementById(_item!.model)!.name),
+                        .manufacturers
+                        .getElementById(item.manufacturer)
+                        ?.name ??
+                    l10n.unknown),
+                Text(Cache().computerModels.getElementById(item.model)?.name ??
+                    l10n.unknown),
               ],
             ),
             const SizedBox(height: 16.0),
-            _item!.notes != null && _item!.notes!.isNotEmpty
-                ? NoteCard(_item!.notes!.first.content)
+            item.notes != null && item.notes!.isNotEmpty
+                ? NoteCard(item.notes!.first.content)
                 : const SizedBox(),
             FilledButton(
                 onPressed: () async {

@@ -74,9 +74,6 @@ class HomeScreen extends StatelessWidget {
       if (context.mounted) {
         _toSettings(context, "Wrong App token");
       }
-    } catch (e) {
-      log(e.toString());
-      return false;
     }
 
     return true;

@@ -9,6 +9,8 @@ class ItemCollection<T extends Item> {
   DateTime? _updatedAt;
   List<T> arr = [];
 
+  ItemCollection();
+
   bool isStale() {
     return _updatedAt == null ||
         _updatedAt!.add(_stalenessThreshold).isBefore(DateTime.now());

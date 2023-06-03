@@ -25,6 +25,7 @@
   "server": "Serveur",
   "settings": "Paramètres",
   "status": "Statut : {status}",
+  "unknown": "Inconnu",
   "userToken": "User token",
   "validateServerInfo": "Valider les informations du serveur"
 }

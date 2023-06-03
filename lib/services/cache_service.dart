@@ -13,9 +13,9 @@ class Cache {
   static final Cache _instance = Cache._instantiate();
   Cache._instantiate();
   final Map<ItemType, SearchOptions?> searchOptions = {};
-  ItemCollection<ItemState>? itemStates;
-  ItemCollection<ComputerModel>? computerModels;
-  ItemCollection<Manufacturer>? manufacturers;
+  ItemCollection<ItemState> itemStates = ItemCollection();
+  ItemCollection<ComputerModel> computerModels = ItemCollection();
+  ItemCollection<Manufacturer> manufacturers = ItemCollection();
 
   factory Cache() => _instance;
 
@@ -42,9 +42,9 @@ class Cache {
       itemStates = ItemCollection<ItemState>.unserialize(
           prefs.getString(key)!, ItemState.fromJson);
     }
-    if (itemStates == null || itemStates!.isStale()) {
+    if (itemStates.isStale()) {
       itemStates = await API().itemStates();
-      prefs.setString(key, itemStates!.serialize());
+      prefs.setString(key, itemStates.serialize());
     }
 
     // ComputerModels
@@ -54,9 +54,9 @@ class Cache {
       computerModels = ItemCollection<ComputerModel>.unserialize(
           prefs.getString(key)!, ComputerModel.fromJson);
     }
-    if (computerModels == null || computerModels!.isStale()) {
+    if (computerModels.isStale()) {
       computerModels = await API().computerModels();
-      prefs.setString(key, computerModels!.serialize());
+      prefs.setString(key, computerModels.serialize());
     }
 
     // Manufacturers
@@ -66,10 +66,9 @@ class Cache {
       manufacturers = ItemCollection<Manufacturer>.unserialize(
           prefs.getString(key)!, Manufacturer.fromJson);
     }
-    manufacturers = null;
-    if (manufacturers == null || manufacturers!.isStale()) {
+    if (manufacturers.isStale()) {
       manufacturers = await API().manufacturers();
-      prefs.setString(key, manufacturers!.serialize());
+      prefs.setString(key, manufacturers.serialize());
     }
   }
 }
