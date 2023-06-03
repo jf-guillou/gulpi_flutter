@@ -8,7 +8,6 @@ import 'package:gulpi/services/api_service.dart';
 import 'package:gulpi/services/cache_service.dart';
 import 'package:gulpi/widgets/app_drawer.dart';
 import 'package:gulpi/widgets/note_card.dart';
-import 'package:gulpi/widgets/textfield_popup.dart';
 
 class InventoryScreen extends StatefulWidget {
   static const name = "InventoryScreen";
@@ -104,17 +103,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
             _item!.notes != null && _item!.notes!.isNotEmpty
                 ? NoteCard(_item!.notes!.first.content)
                 : const SizedBox(),
-            FilledButton.tonal(
-                onPressed: null,
-                // onPressed: () {
-                //   showDialog(
-                //       context: context,
-                //       builder: (context) =>
-                //           TextFieldPopup(l10n.note, '', '', (val) {
-                //             _addNote(val);
-                //           }));
-                // },
-                child: Text(l10n.addNote)),
             FilledButton(
                 onPressed: () async {
                   if (await _saveChanges(widget.id) && mounted) {
@@ -154,6 +142,4 @@ class _InventoryScreenState extends State<InventoryScreen> {
     await _fetchComputer(id);
     return saved;
   }
-
-  // Future<void> _addNote(String content) async {}
 }

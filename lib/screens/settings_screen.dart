@@ -36,9 +36,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   showDialog(
                       context: context,
                       builder: (context) => TextFieldPopup(
-                              l10n.glpiServerUrl,
-                              "https://glpi.example.com",
-                              app.url ?? "", (String value) async {
+                              header: l10n.glpiServerUrl,
+                              hint: "https://glpi.example.com",
+                              value: app.url ?? "", (String value) async {
                             if (!_urlValidator(value)) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text(l10n.malformedUrl)));
@@ -59,7 +59,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   showDialog(
                       context: context,
                       builder: (context) => TextFieldPopup(
-                              l10n.appToken, "", app.appToken ?? l10n.notSet,
+                              header: l10n.appToken,
+                              value: app.appToken ?? l10n.notSet,
                               (String value) async {
                             API().config.setAppToken(value);
                             setState(() {
@@ -76,7 +77,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   showDialog(
                       context: context,
                       builder: (context) => TextFieldPopup(
-                              l10n.userToken, '', app.userToken ?? l10n.notSet,
+                              header: l10n.userToken,
+                              value: app.userToken ?? l10n.notSet,
                               (String value) async {
                             API().config.setUserToken(value);
                             setState(() {

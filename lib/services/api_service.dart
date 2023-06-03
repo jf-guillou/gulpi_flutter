@@ -232,7 +232,7 @@ class API {
   }
 
   Future<ItemCollection<Manufacturer>> manufacturers() async {
-    log('computerModels');
+    log('manufacturers');
     var response = await http.get(uri(['Manufacturer']), headers: headers());
     log("statusCode:${response.statusCode}");
     if (response.statusCode == HttpStatus.unauthorized) {

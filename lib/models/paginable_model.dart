@@ -1,8 +1,8 @@
-import 'package:gulpi/models/base_model.dart';
+import 'package:gulpi/models/searchitem_model.dart';
 
 typedef Itemizer<S> = S Function(Map<String, dynamic> item);
 
-class Paginable<T extends BaseModel> {
+class Paginable<T extends SearchItem> {
   late int totalcount;
   late int count;
   late String sort;

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TextFieldPopup extends StatefulWidget {
-  final String header;
-  final String hint;
-  final String defaultValue;
+  final String? header;
+  final String? hint;
+  final String? value;
   final Function onchange;
-  const TextFieldPopup(this.header, this.hint, this.defaultValue, this.onchange,
-      {Key? key})
+  const TextFieldPopup(this.onchange,
+      {this.header, this.hint, this.value, Key? key})
       : super(key: key);
 
   @override
@@ -18,7 +18,7 @@ class TextFieldPopupState extends State<TextFieldPopup> {
   String? textFieldValue;
   @override
   void initState() {
-    textFieldValue = widget.defaultValue;
+    textFieldValue = widget.value;
     super.initState();
   }
 
@@ -26,9 +26,9 @@ class TextFieldPopupState extends State<TextFieldPopup> {
   Widget build(BuildContext context) {
     AppLocalizations l10n = AppLocalizations.of(context)!;
     return AlertDialog(
-      title: Text(widget.header),
+      title: Text(widget.header ?? ""),
       content: TextFormField(
-        initialValue: widget.defaultValue,
+        initialValue: widget.value,
         onChanged: (value) {
           textFieldValue = value;
         },
